@@ -4,3 +4,4 @@ node_modules/
 *.log
 .wrangler/
 Unselected files/
+shots/

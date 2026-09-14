@@ -1,473 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="robots" content="noindex">
-<meta name="theme-color" content="#07070c">
-<title>__TITLE__</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07070b">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>__TITLE__</title>
 <style>
-:root{
-  --bg:#07070c; --bg2:#0c0c14; --card:#101019; --card2:#151522;
-  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
-  --txt:#f2f2f7; --mut:#9090a5; --mut2:#5c5c70;
-  --red:#f43f5e; --red2:#e11d48; --dark:#881337;
-  --amber:#fbbf24; --green:#34d399;
-}
+:root{--bg:#07070b;--bg2:#0d0d14;--card:#11111a;--line:#1f1f2d;--line2:#2b2b3d;--txt:#ecebf3;--mut:#8f8fa3;--rose:#f43f5e;--rose2:#be123c;--amber:#fbbf24;--green:#22c55e;--blue:#38bdf8;--vio:#a78bfa}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);color:var(--txt);
-  font-family:Vazirmatn,-apple-system,"Segoe UI",Tahoma,"Iranian Sans",sans-serif;
-  font-size:15px;line-height:1.8;min-height:100vh;overflow-x:hidden;
-}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background:
-    radial-gradient(ellipse 90% 40% at 50% -8%,rgba(244,63,94,.13),transparent),
-    radial-gradient(ellipse 60% 30% at 85% 110%,rgba(251,191,36,.05),transparent);}
-.wrap{max-width:680px;margin:0 auto;padding:26px 16px 40px}
-a{color:var(--red);text-decoration:none}
-::selection{background:rgba(244,63,94,.35)}
-::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#26263a;border-radius:8px}
-
-/* header */
-header{text-align:center;padding:10px 0 4px}
-.logo-badge{width:92px;height:92px;margin:0 auto 12px;border-radius:26px;
-  background:linear-gradient(160deg,#141420,#0a0a10);border:1px solid var(--line2);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 12px 40px rgba(244,63,94,.18),inset 0 1px 0 rgba(255,255,255,.06);
-  animation:breath 5s ease-in-out infinite}
-@keyframes breath{0%,100%{box-shadow:0 12px 40px rgba(244,63,94,.14),inset 0 1px 0 rgba(255,255,255,.06)}50%{box-shadow:0 12px 56px rgba(244,63,94,.3),inset 0 1px 0 rgba(255,255,255,.06)}}
-h1{font-size:24px;font-weight:800;letter-spacing:.5px}
-h1 .en{font-size:13px;color:var(--mut);font-weight:400;display:block;letter-spacing:3px;margin-top:2px}
-.ribbon{margin:14px auto 0;display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(90deg,rgba(136,19,55,.25),rgba(244,63,94,.12),rgba(136,19,55,.25));
-  border:1px solid rgba(244,63,94,.28);color:#ff9db0;border-radius:99px;
-  padding:5px 18px;font-size:12px;font-weight:600}
-
-/* hero */
-.hero{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:22px;
-  padding:22px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--red),var(--amber),var(--red),transparent)}
-.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.hello{font-size:17px;font-weight:700}
-.hello small{display:block;font-weight:400;color:var(--mut);font-size:12.5px;margin-top:3px}
-.status-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 15px;border-radius:99px;font-size:12.5px;font-weight:700}
-.status-chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 1.6s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.st-ok{background:rgba(52,211,153,.12);color:var(--green)}
-.st-quota,.st-exp{background:rgba(244,63,94,.13);color:var(--red)}
-.st-pend{background:rgba(251,191,36,.12);color:var(--amber)}
-.st-off{background:rgba(255,255,255,.07);color:var(--mut)}
-.usage{display:flex;align-items:center;gap:20px;margin-top:18px;flex-wrap:wrap}
-.ring{position:relative;width:118px;height:118px;flex-shrink:0}
+html,body{background:var(--bg);color:var(--txt);font-family:"Vazirmatn","Segoe UI",Tahoma,system-ui,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(700px 400px at 90% -10%,rgba(244,63,94,.16),transparent 60%),radial-gradient(600px 400px at 0% 100%,rgba(251,191,36,.07),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:18px 14px 60px}
+.hero{text-align:center;padding:18px 0 12px}
+.flame{width:66px;height:66px;border-radius:20px;margin:0 auto 10px;background:linear-gradient(135deg,var(--rose),#7f1d1d);display:grid;place-items:center;box-shadow:0 18px 50px -14px var(--rose)}
+.hero h1{font-size:22px;font-weight:800}
+.hero p{color:var(--mut);font-size:12.5px}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px;box-shadow:0 12px 40px -14px #000}
+.card h3{font-size:14.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.nw{flex-wrap:nowrap}.row.nw input{min-width:0;flex:1}
+.grow{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:12px;border:1px solid var(--line2);background:#161624;color:var(--txt);font:inherit;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--rose)}
+.btn.p{background:linear-gradient(135deg,var(--rose),var(--rose2));border-color:transparent;color:#fff}
+.btn.b{background:linear-gradient(135deg,#0284c7,#0369a1);border-color:transparent;color:#fff}
+.btn.s{padding:7px 10px;font-size:12px;border-radius:10px}
+.btn.i{width:38px;height:38px;padding:0;font-size:16px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line2);background:var(--bg2);color:var(--mut)}
+.chip.ok{color:#86efac;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.08)}
+.chip.bad{color:#fda4af;border-color:rgba(244,63,94,.4);background:rgba(244,63,94,.08)}
+.chip.warn{color:#fde68a;border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08)}
+.chip.info{color:#7dd3fc;border-color:rgba(56,189,248,.4);background:rgba(56,189,248,.08)}
+.chip.vio{color:#c4b5fd;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
+.bar{height:10px;border-radius:99px;background:#1a1a26;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--rose),var(--amber));transition:width 1s}
+.bar.w>i{background:linear-gradient(90deg,var(--amber),var(--rose))}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.kv div{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.kv b{display:block;font-size:16px}
+.kv small{color:var(--mut);font-size:11px}
+.ring{position:relative;width:118px;height:118px;margin:0 auto}
 .ring svg{transform:rotate(-90deg)}
-.ring .track{stroke:rgba(255,255,255,.08)}
-.ring .bar{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset .8s ease}
-.ring .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring .mid b{font-size:19px;font-variant-numeric:tabular-nums}
-.ring .mid span{font-size:10.5px;color:var(--mut)}
-.umeta{flex:1;min-width:200px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.umeta .cell{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
-.umeta .cell .k{font-size:11px;color:var(--mut);margin-bottom:3px}
-.umeta .cell .v{font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums}
-
-/* actions */
-.bigacts{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-.bbtn{flex:1;min-width:150px;border:none;cursor:pointer;border-radius:14px;padding:13px 16px;
-  font-family:inherit;font-size:14px;font-weight:700;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.bbtn:active{transform:scale(.98)}
-.bbtn-red{background:linear-gradient(135deg,var(--red2),var(--dark));color:#fff}
-.bbtn-red:hover{filter:brightness(1.15)}
-.bbtn-ghost{background:var(--card2);border:1px solid var(--line2);color:var(--txt)}
-.bbtn-ghost:hover{border-color:var(--red)}
-
-/* sections */
-section{margin-top:26px}
-.sec-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;margin-bottom:14px}
-.sec-title::after{content:"";flex:1;height:1px;background:var(--line)}
-
-/* isp tabs */
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
-.tab{flex-shrink:0;border:1px solid var(--line2);background:var(--card);color:var(--mut);
-  border-radius:99px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit}
-.tab.on{background:linear-gradient(135deg,rgba(225,29,72,.25),rgba(136,19,55,.15));color:#ff8095;border-color:rgba(244,63,94,.4)}
-.tab:not(.on):hover{color:var(--txt)}
-.preset-note{font-size:12px;color:var(--mut);margin:10px 2px 0;min-height:20px}
-
-/* config cards */
-.cfg{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:12px;transition:.15s}
-.cfg:hover{border-color:rgba(244,63,94,.3)}
-.cfg-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.cfg-head .nm{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px}
-.flag{font-size:19px}
-.proto-tag{font-size:10px;font-weight:800;letter-spacing:1px;padding:2px 9px;border-radius:7px}
-.proto-vless{background:rgba(96,165,250,.14);color:#7db6f9}
-.proto-trojan{background:rgba(244,63,94,.14);color:#ff8095}
-.cfg-link{margin-top:10px;background:var(--bg2);border:1px solid var(--line);border-radius:11px;
-  padding:9px 13px;font-size:11.5px;color:var(--mut);direction:ltr;text-align:left;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:ui-monospace,Menlo,Consolas,monospace}
-.cfg-acts{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
-.cbtn{border:1px solid var(--line2);background:var(--card2);color:var(--txt);border-radius:10px;
-  padding:8px 15px;font-size:12.5px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
-.cbtn:hover{border-color:var(--red);color:#ff8095}
-.cbtn:active{transform:scale(.97)}
-
-/* guide */
-.guide-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
-.steps{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
-.steps ol{padding-right:20px;font-size:13.5px;color:#cfcfdd}
-.steps li{margin-bottom:9px}
-.steps li:last-child{margin-bottom:0}
+.ring .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1.2}
+.ring .c b{font-size:20px}.ring .c small{font-size:10.5px;color:var(--mut)}
+.tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:4px;margin-top:14px}
+.tabs button{flex:1;padding:9px;border:0;border-radius:11px;background:none;color:var(--mut);font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.tabs button.on{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff}
+.hidden{display:none!important}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:embed}
+input,select{font:inherit;color:var(--txt);background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;width:100%;outline:none}
+select{appearance:none;padding-left:30px;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(0% + 16px) 55%,calc(0% + 11px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.qr{background:#fff;padding:10px;border-radius:14px;display:inline-block;margin:0 auto}
+.qr svg{display:block}
+.cfg{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;background:var(--bg2)}
+.cfg .t{display:flex;align-items:center;gap:8px}
+.cfg .t b{font-size:13.5px}
+.cfg .h{font-size:11px;color:var(--mut);margin-top:2px}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.apps a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:14px;border:1px solid var(--line2);background:#161624;color:var(--txt);text-decoration:none;font-size:12px;font-weight:700}
+.apps a span{font-size:22px}
+.apps a small{font-weight:400;color:var(--mut);font-size:10.5px}
+.muted{color:var(--mut)}.small{font-size:12px}.xs{font-size:11px}
+.foot{text-align:center;color:var(--mut);font-size:11.5px;margin-top:22px;line-height:2}
+.foot .m{color:#fda4af}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#15151f;border:1px solid var(--line2);border-right:3px solid var(--green);padding:10px 16px;border-radius:12px;z-index:9;font-size:13px;animation:pop .2s}
+@keyframes pop{from{opacity:0;transform:translate(-50%,8px)}}
+.steps{font-size:12.5px;color:var(--mut);line-height:2}
 .steps b{color:var(--txt)}
-.kbd{background:var(--bg2);border:1px solid var(--line2);border-bottom-width:2px;border-radius:7px;
-  padding:1px 8px;font-size:12px;direction:ltr;display:inline-block;font-family:ui-monospace,Menlo,monospace}
-
-/* frag table */
-.frag{width:100%;border-collapse:collapse;font-size:12.5px}
-.frag th,.frag td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.05);text-align:right}
-.frag th{color:var(--mut);font-weight:600;font-size:11.5px}
-
-/* qr modal */
-.modal-bg{position:fixed;inset:0;background:rgba(3,3,8,.8);backdrop-filter:blur(8px);z-index:60;
-  display:flex;align-items:center;justify-content:center;padding:18px}
-.modal{background:var(--card);border:1px solid var(--line2);border-radius:22px;padding:24px;text-align:center;max-width:320px;width:100%}
-.modal h4{font-size:15px;margin-bottom:14px}
-#qrBox{background:#fff;border-radius:16px;padding:14px;display:inline-block}
-#qrBox canvas,#qrBox img{display:block}
-.modal .hint{font-size:11.5px;color:var(--mut);margin-top:12px;direction:ltr;word-break:break-all}
-
-/* toast */
-#toasts{position:fixed;bottom:18px;right:50%;transform:translateX(50%);z-index:99;display:flex;flex-direction:column;gap:8px;align-items:center}
-.toast{background:#1b1b2a;border:1px solid var(--line2);border-right:3px solid var(--red);
-  border-radius:12px;padding:10px 20px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:tin .25s}
-.toast.ok{border-right-color:var(--green)}
-@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* footer */
-footer{margin-top:34px;text-align:center;padding:22px 10px 6px;border-top:1px solid var(--line)}
-.memorial{font-size:13px;color:#ff9db0;line-height:2.1}
-.candle{font-size:20px;display:block;margin-bottom:4px;animation:flicker 2.2s ease-in-out infinite}
-@keyframes flicker{0%,100%{opacity:1}50%{opacity:.55}}
-.meta{font-size:11px;color:var(--mut2);margin-top:8px;line-height:2}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute"><defs>
-<linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0" stop-color="#e11d48"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
-</defs></svg>
-
-<div class="wrap">
-  <header>
-    <div class="logo-badge">
-      <svg width="58" height="58" viewBox="0 0 64 64">
-        <defs>
-        <linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#f43f5e"/><stop offset="1" stop-color="#881337"/></linearGradient>
-        <radialGradient id="lc" cx="0.5" cy="0.35" r="0.55">
-        <stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f43f5e" stop-opacity="0"/></radialGradient>
-        </defs>
-        <rect width="64" height="64" rx="14" fill="#0a0a10" opacity="0"/>
-        <path d="M32 8c-2 5.5-6.8 8-6.8 14 0 3.8 2.1 7 4.7 9.3C30.5 39.5 28 45.6 22 51.4c7.8-1.8 12.4-5.6 14.9-10.7 2.5 5.1 7.1 8.9 14.9 10.7-6-5.8-8.5-11.9-7.9-20.1 2.6-2.3 4.7-5.5 4.7-9.3 0-6-4.8-8.5-6.8-14-1.8 3.8-4.7 5.6-7.6 5.6s-4.2-1.8-6.2-5.6z" fill="url(#lg)"/>
-        <ellipse cx="32" cy="23" rx="4" ry="7" fill="url(#lc)" opacity="0.95"/>
-      </svg>
-    </div>
-    <h1>جاویدنام<span class="en">J A V I D N A M</span></h1>
-    <div class="ribbon">🕯 به یاد جان‌باختگان ۱۸ و ۱۹ دی ۱۴۰۴ — نامشان جاوید</div>
-  </header>
-
-  <div id="content"></div>
-
-  <footer id="foot"></footer>
-</div>
-
-<div id="toasts"></div>
-<div id="modalHost"></div>
-
-<script>__QRCODE_JS__</script>
-<script id="sub-data" type="application/json">__SUB_DATA_JSON__</script>
+<canvas id="bg"></canvas><div id="glow"></div>
+<div class="wrap" id="root"></div>
 <script>
-/* ===== JavidNam Sub Page — original code, GPL-3.0 ===== */
-const D = JSON.parse(document.getElementById('sub-data').textContent);
-const $ = s => document.querySelector(s);
-let ACTIVE_PRESET = D.presets && D.presets.length ? D.presets[0] : {id:'all',label:'همه',fp:'chrome',frag:null};
-let PROTO_FILTER = 'all';
+__QRCODE_JS__
+</script>
+<script>
+const D = __SUB_DATA_JSON__;
+const $ = (s, r = document) => r.querySelector(s);
+const GB = 1073741824;
+const fa = (n) => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtB = (b) => { b = Number(b) || 0; if (b >= GB) return (b / GB).toFixed(2) + ' GB'; if (b >= 1048576) return (b / 1048576).toFixed(0) + ' MB'; return (b / 1024).toFixed(0) + ' KB'; };
+const jdate = (ts) => { if (!ts) return '—'; try { return new Intl.DateTimeFormat('fa-IR', { dateStyle: 'medium' }).format(new Date(ts)); } catch (e) { return new Date(ts).toLocaleDateString(); } };
+const ago = (ts) => { if (!ts) return 'هنوز وصل نشده'; const d = Date.now() - ts; if (d < 60e3) return 'همین الان'; if (d < 3600e3) return fa(Math.floor(d / 60e3)) + ' دقیقه پیش'; if (d < 86400e3) return fa(Math.floor(d / 3600e3)) + ' ساعت پیش'; return fa(Math.floor(d / 86400e3)) + ' روز پیش'; };
+function toast(m) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
+function copy(t, m = 'کپی شد ✓') { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(m)).catch(() => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); toast(m); }); }
+function qr(el, text, size = 200) { try { const q = qrcode(0, 'M'); q.addData(text); q.make(); el.innerHTML = q.createSvgTag({ cellSize: Math.max(2, Math.floor(size / q.getModuleCount())), margin: 0 }); } catch (e) { el.textContent = '—'; } }
 
-function fa(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
-function div(a,b){return ~~(a/b)}
-function toJalali(gy,gm,gd){
-  const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
-  let gy2=gy-1600,gm2=gm-1,gd2=gd-1;
-  let g_day_no=365*gy2+div(gy2+3,4)-div(gy2+99,100)+div(gy2+399,400);
-  g_day_no+=g_d_m[gm2]+gd2;
-  if(gm2>1&&((gy%4===0&&gy%100!==0)||(gy%400===0)))g_day_no++;
-  g_day_no-=79;
-  let j_day_no=div(g_day_no,12053);g_day_no%=12053;
-  let jy=979+33*j_day_no+4*div(g_day_no,1461);
-  g_day_no%=1461;
-  if(g_day_no>=366){jy+=div(g_day_no-1,365);g_day_no=(g_day_no-1)%365}
-  let jm=0;
-  const ml=[31,31,31,31,31,31,30,30,30,30,30,29];
-  let i;
-  for(i=0;i<11&&g_day_no>=ml[i];i++){g_day_no-=ml[i]}
-  return [jy,i+1,g_day_no+1];
-}
-function jalali(ts){
-  if(!ts)return '—';
-  const d=new Date(ts);
-  const [jy,jm,jd]=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
-  return fa(jd)+' '+['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][jm-1]+' '+fa(jy);
-}
-function gb(bytes){
-  if(!bytes)return '۰';
-  const u=['بایت','کیلوبایت','مگابایت','گیگابایت','ترابایت'];
-  let i=0,v=bytes;
-  while(v>=1024&&i<4){v/=1024;i++}
-  return fa(v.toFixed(v<10&&i>1?2:0))+' '+u[i];
-}
-function daysLeft(ts){return ts?Math.max(0,Math.ceil((ts-Date.now())/86400000)):null}
+(function bg() { const c = $('#bg'), x = c.getContext('2d'); let w, h, P = []; const rs = () => { w = c.width = innerWidth * devicePixelRatio; h = c.height = innerHeight * devicePixelRatio; }; rs(); addEventListener('resize', rs); for (let i = 0; i < 45; i++) P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 2 + .6, v: Math.random() * .0006 + .0002, o: Math.random() * .5 + .2, d: Math.random() * 6.28 }); (function f(t) { x.clearRect(0, 0, w, h); for (const p of P) { p.y -= p.v; p.x += Math.sin(t / 2000 + p.d) * .00025; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); } const g = x.createRadialGradient(p.x * w, p.y * h, 0, p.x * w, p.y * h, p.r * 6 * devicePixelRatio); g.addColorStop(0, `rgba(251,113,133,${p.o})`); g.addColorStop(1, 'rgba(251,113,133,0)'); x.fillStyle = g; x.beginPath(); x.arc(p.x * w, p.y * h, p.r * 6 * devicePixelRatio, 0, 6.28); x.fill(); } requestAnimationFrame(f); })(0); })();
 
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-
-function toast(msg,ok){
-  const t=document.createElement('div');
-  t.className='toast'+(ok?' ok':'');
-  t.textContent=msg;
-  $('#toasts').appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),320)},2400);
-}
-
-/* apply ISP preset to a link (client-side tunables) */
-function tunedLink(link){
-  try{
-    const u=new URL(link);
-    u.searchParams.set('fp',ACTIVE_PRESET.fp||'chrome');
-    if(ACTIVE_PRESET.frag){
-      const f=ACTIVE_PRESET.frag;
-      u.searchParams.set('frag',f[0]+'-'+f[1]+'-'+f[2]+'-'+f[3]);
-    }else{
-      u.searchParams.delete('frag');
-    }
-    return u.toString();
-  }catch(e){return link}
-}
-
-function statusInfo(){
-  const s=D.state;
-  if(!s.ok){
-    if(s.overQuota)return {cls:'st-quota',txt:'حجم تمام شده',icon:'⛔'};
-    if(s.expired)return {cls:'st-exp',txt:'اشتراک منقضی شده',icon:'⏰'};
-    return {cls:'st-off',txt:'غیرفعال',icon:'⏸'};
-  }
-  if(s.pending)return {cls:'st-pend',txt:'آماده — شروع با اولین اتصال',icon:'✨'};
-  return {cls:'st-ok',txt:'اشتراک فعال',icon:'✅'};
-}
-
-function ringSvg(pct){
-  const r=48,c=2*Math.PI*r;
-  return `<div class="ring">
-    <svg width="118" height="118">
-      <circle class="track" cx="59" cy="59" r="${r}" fill="none" stroke-width="9"/>
-      <circle class="bar" cx="59" cy="59" r="${r}" fill="none" stroke-width="9"
-        stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pct)}"/>
-    </svg>
-    <div class="mid"><b>${fa(Math.round(pct*100))}٪</b><span>مصرف حجم</span></div>
-  </div>`;
-}
-
-function render(){
-  const s=D.state;
-  const st=statusInfo();
-  const pct=s.quota===null?(s.used>0?1:0):Math.min(1,s.used/s.quota);
-  const dl=daysLeft(s.expiryAt);
-  const myWelcome=esc(D.welcome||'سلام! این اشتراک اختصاصی توئه. 🌷');
-  const name=esc(D.name||'کاربر');
-
-  const links=D.links.filter(l=>PROTO_FILTER==='all'||l.proto===PROTO_FILTER);
-  const presetNote=ACTIVE_PRESET.note?('💡 '+esc(ACTIVE_PRESET.note)):'';
-
-  $('#content').innerHTML=`
+const st = D.state, S = D.status;
+let view = D.view, links = D.links, preset = D.preset;
+function statusChip() { if (!st.active) return '<span class="chip bad">غیرفعال</span>'; if (st.expired) return '<span class="chip bad">منقضی شده</span>'; if (st.overQuota) return '<span class="chip bad">حجم تمام شده</span>'; if (st.overRequests) return '<span class="chip bad">سقف اتصال</span>'; if (st.pending) return '<span class="chip warn">منتظر اولین اتصال</span>'; const on = S.last_seen_at && Date.now() - S.last_seen_at < 5 * 60000; return `<span class="chip ok">${on ? '🟢 آنلاین' : '✅ فعال'}</span>`; }
+function render() {
+  const pct = st.quota ? Math.min(100, Math.round(st.used / st.quota * 100)) : 0;
+  const R = 50, C = 2 * Math.PI * R, dash = C * (1 - pct / 100);
+  $('#root').innerHTML = `
   <div class="hero">
-    <div class="hero-top">
-      <div class="hello">سلام، ${name} 👋<small>${myWelcome}</small></div>
-      <div class="status-chip ${st.cls}">${st.icon}<span class="dot"></span>${st.txt}</div>
-    </div>
-    <div class="usage">
-      ${ringSvg(pct)}
-      <div class="umeta">
-        <div class="cell"><div class="k">مصرف شده</div><div class="v">${gb(s.used)}</div></div>
-        <div class="cell"><div class="k">${s.quota===null?'سهمیه':'باقی‌مانده'}</div><div class="v">${s.quota===null?'نامحدود ∞':gb(s.remainingBytes)}</div></div>
-        <div class="cell"><div class="k">${s.expiryAt===null?'اعتبار':'تاریخ انقضا'}</div><div class="v">${s.expiryAt===null?'نامحدود ∞':jalali(s.expiryAt)}</div></div>
-        <div class="cell"><div class="k">${s.expiryAt===null?'وضعیت':'روز باقی‌مانده'}</div><div class="v">${s.expiryAt===null?'همیشه':(dl+' روز')}</div></div>
-      </div>
-    </div>
-    <div class="bigacts">
-      <button class="bbtn bbtn-red" id="copyAll">📋 کپی همه کانفیگ‌ها</button>
-      <button class="bbtn bbtn-ghost" id="copySub">🔗 کپی لینک ساب‌اسکریپشن</button>
-    </div>
+    <div class="flame"><svg width="36" height="36" viewBox="0 0 64 64"><path d="M32 10c-1.8 5-6 7.2-6 12.6 0 3.4 1.9 6.3 4.2 8.4C29.6 39 27.4 44.6 22 50c7-1.6 11.2-5 13.4-9.6 2.2 4.6 6.4 8 13.4 9.6-5.4-5.4-7.6-11-8.2-19 2.3-2.1 4.2-5 4.2-8.4C44.8 17.2 40.6 15 38.8 10c-1.6 3.4-4.2 5-6.8 5s-5.2-1.6-6.8-5z" fill="#fff"/></svg></div>
+    <h1>${esc(D.name)}</h1><p>${esc(D.welcome || D.brand.fa)}</p>
+    <div style="margin-top:8px">${statusChip()}</div>
   </div>
-
-  <section>
-    <div class="sec-title">📡 کانفیگ‌های اختصاصی</div>
-    <div class="tabs" id="ispTabs">
-      ${D.presets.map(p=>`<button class="tab${p.id===ACTIVE_PRESET.id?' on':''}" data-p="${p.id}">${esc(p.label)}</button>`).join('')}
+  <div class="tabs"><button class="${view === 'configs' ? 'on' : ''}" onclick="view='configs';render()">⚡ اتصال</button><button class="${view === 'status' ? 'on' : ''}" onclick="view='status';render()">📊 وضعیت</button><button class="${view === 'help' ? 'on' : ''}" onclick="view='help';render()">📖 راهنما</button></div>
+  ${view === 'status' ? `
+  <div class="card" style="text-align:center">
+    <div class="ring"><svg width="118" height="118"><circle cx="59" cy="59" r="${R}" stroke="#1a1a26" stroke-width="10" fill="none"/><circle cx="59" cy="59" r="${R}" stroke="${pct > 85 ? '#f43f5e' : '#fbbf24'}" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${dash}" style="transition:stroke-dashoffset 1s"/></svg><div class="c"><div><b>${st.quota ? fa(pct) + '٪' : '∞'}</b><br><small>مصرف شده</small></div></div></div>
+    <div class="kv">
+      <div><b>${fmtB(st.used)}</b><small>مصرف</small></div>
+      <div><b>${st.quota ? fmtB(st.remainingBytes) : '∞'}</b><small>باقی‌مانده</small></div>
+      <div><b>${st.quota ? fmtB(st.quota) : '∞'}</b><small>کل حجم</small></div>
+      <div><b>${st.expiryAt ? fa(st.daysLeft) : '∞'}</b><small>روز مانده</small></div>
+      <div><b style="font-size:13px">${st.expiryAt ? jdate(st.expiryAt) : st.pending ? 'پس از اتصال' : 'نامحدود'}</b><small>تاریخ انقضا</small></div>
+      <div><b>${S.ip_limit ? fa(S.online_ips) + ' / ' + fa(S.ip_limit) : '∞'}</b><small>دستگاه آنلاین</small></div>
     </div>
-    <div class="preset-note">${presetNote}</div>
-    <div class="tabs" id="protoTabs" style="margin-top:10px">
-      <button class="tab${PROTO_FILTER==='all'?' on':''}" data-pt="all">همه پروتکل‌ها</button>
-      <button class="tab${PROTO_FILTER==='vless'?' on':''}" data-pt="vless">VLESS</button>
-      <button class="tab${PROTO_FILTER==='trojan'?' on':''}" data-pt="trojan">Trojan</button>
+    <div class="small muted" style="margin-top:10px">آخرین اتصال: ${ago(S.last_seen_at)}${S.max_requests ? ' · اتصال‌ها: ' + fa(S.used_requests) + ' / ' + fa(S.max_requests) : ''}</div>
+    <div class="row" style="justify-content:center;margin-top:10px"><button class="btn s" onclick="location.reload()">🔄 بروزرسانی</button><button class="btn s" onclick="copy(D.status_url,'لینک وضعیت کپی شد')">🔗 لینک این صفحه</button></div>
+  </div>` : view === 'help' ? `
+  <div class="card"><h3>📱 اندروید — v2rayNG / Hiddify</h3><div class="steps">۱) برنامه را نصب کن. ۲) در تب «اتصال» روی دکمه‌ی برنامه بزن تا ساب خودکار اضافه شود (یا لینک ساب را کپی و در برنامه <b>+ → Subscription</b> بچسبان). ۳) روی کانفیگ بزن و وصل شو. ۴) اگر وصل نشد، اپراتورت را از منوی «بهینه‌سازی» انتخاب کن و ساب را دوباره آپدیت کن.</div></div>
+  <div class="card"><h3>🍎 آیفون — Streisand / Hiddify / Shadowrocket</h3><div class="steps">Streisand رایگان است. لینک ساب را کپی کن → در برنامه <b>+ → Import from clipboard</b> → کانفیگ‌ها اضافه می‌شوند. برای Shadowrocket: <b>+ → Subscribe</b>.</div></div>
+  <div class="card"><h3>💻 ویندوز / مک / لینوکس</h3><div class="steps"><b>Hiddify</b> (همه‌ی سیستم‌ها)، <b>v2rayN</b> (ویندوز)، <b>Clash Verge / Mihomo</b> با فرمت Clash. لینک ساب یکسان است؛ فرمت به‌صورت خودکار بر اساس برنامه انتخاب می‌شود.</div></div>
+  <div class="card"><h3>🩹 رفع مشکل</h3><div class="steps">• <b>وصل می‌شود ولی سایت باز نمی‌شود:</b> اپراتور را عوض کن (بهینه‌سازی) یا لوکیشن دیگری را امتحان کن.<br>• <b>سرعت پایین:</b> لوکیشن «IP تمیز» را انتخاب کن؛ هر ۶ ساعت IPها به‌روز می‌شوند.<br>• <b>هیچ‌کدام وصل نمی‌شود:</b> ساب را حذف و دوباره اضافه کن؛ حالت «همه‌ی سایت‌ها از پروکسی» را فعال کن.<br>${D.contact ? `• پشتیبانی: <a href="${esc(D.contact)}" style="color:#7dd3fc">${esc(D.contact)}</a>` : ''}</div></div>` : `
+  <div class="card">
+    <h3>🔗 لینک اشتراک <span class="chip info">خودکار</span></h3>
+    <div class="row nw"><input class="mono" value="${D.sub_url}" readonly onclick="this.select()"><button class="btn i p" onclick="copy(D.sub_url,'لینک ساب کپی شد')">📋</button></div>
+    <p class="xs muted" style="margin:6px 0 10px">این لینک را در برنامه‌ات وارد کن؛ کانفیگ‌ها و IPهای جدید خودکار می‌رسند.</p>
+    <div class="apps">
+      <a href="hiddify://import/${D.sub_url}"><span>🟣</span>Hiddify<small>همه‌ی سیستم‌ها</small></a>
+      <a href="v2rayng://install-sub?url=${encodeURIComponent(D.sub_url)}&name=${encodeURIComponent('JavidNam ' + D.name)}"><span>🟢</span>v2rayNG<small>اندروید</small></a>
+      <a href="streisand://import/${D.sub_url}"><span>🔵</span>Streisand<small>آیفون</small></a>
+      <a href="sing-box://import-remote-profile?url=${encodeURIComponent(D.formats.sb)}#JavidNam"><span>📦</span>sing-box<small>SFA / SFI</small></a>
+      <a href="clash://install-config?url=${encodeURIComponent(D.formats.clash)}&name=JavidNam"><span>🐱</span>Clash<small>Verge / Mihomo</small></a>
+      <a href="shadowrocket://add/sub://${btoa(D.sub_url)}?remark=JavidNam"><span>🚀</span>Shadowrocket<small>آیفون</small></a>
     </div>
-    <div id="cfgList" style="margin-top:14px">
-      ${links.map((l,i)=>`
-      <div class="cfg">
-        <div class="cfg-head">
-          <div class="nm"><span class="flag">${l.proto==='vless'':'🛡'}</span>${esc(l.name)} — ${esc(D.brand?.fa||'جاویدنام')}</div>
-          <span class="proto-tag proto-${l.proto}">${l.proto.toUpperCase()}</span>
-        </div>
-        <div class="cfg-link" id="lnk${i}">${esc(tunedLink(l.link))}</div>
-        <div class="cfg-acts">
-          <button class="cbtn" onclick="copyLink(${i})">📋 کپی لینک</button>
-          <button class="cbtn" onclick="showQr(${i})">📱 QR</button>
-        </div>
-      </div>`).join('')}
-      ${!links.length?'<div style="text-align:center;color:var(--mut);padding:24px">کانفیگی با این فیلتر نیست</div>':''}
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-title">📖 راهنمای اتصال</div>
-    <div class="guide-tabs" id="guideTabs">
-      <button class="tab on" data-g="v2rayng">v2rayNG (اندروید)</button>
-      <button class="tab" data-g="hiddify">Hiddify</button>
-      <button class="tab" data-g="ios">iOS (Streisand/V2Box)</button>
-    </div>
-    <div class="steps" id="guideBody" style="margin-top:12px"></div>
-  </section>
-
-  <section>
-    <div class="sec-title">🧩 تنظیم Fragment (ضد فیلترینگ)</div>
-    <div class="steps">
-      <table class="frag">
-        <tr><th>اپراتور</th><th>Length</th><th>Interval</th><th>توضیح</th></tr>
-        ${D.presets.filter(p=>p.frag).map(p=>`
-        <tr><td><b>${esc(p.label)}</b></td>
-        <td><span class="kbd">${p.frag[0]}-${p.frag[1]}</span></td>
-        <td><span class="kbd">${p.frag[2]}-${p.frag[3]}</span></td>
-        <td style="color:var(--mut)">${esc(p.note||'')}</td></tr>`).join('')}
-      </table>
-      <p style="font-size:12px;color:var(--mut2);margin-top:10px">
-        در v2rayNG: تنظیمات ← Fragment را فعال کنید و مقادیر بالا را وارد کنید. کانفیگ‌های هر تب اپراتور همین بالا به‌صورت خودکار بهینه شده‌اند.
-      </p>
-    </div>
-  </section>`;
-
-  $('#foot').innerHTML=`
-    ${D.show_branding!==false?`
-    <div class="memorial"><span class="candle">🕯</span>
-      به یاد جان‌باختگان ۱۸ و ۱۹ دی ۱۴۰۴<br><b>نامشان جاوید</b></div>`:''}
-    <div class="meta">
-      JavidNam v${esc(D.version)} — بدون تبلیغ، بدون محدودیت مصنوعی<br>
-      ${D.contact?('راه ارتباطی: '+esc(D.contact)+'<br>'):''}
-      ساخته‌شده روی Cloudflare Workers
-    </div>`;
-
-  /* wire events */
-  $('#copyAll').onclick=async()=>{
-    const txt=D.links.map(l=>tunedLink(l.link)).join('\n');
-    await copyText(txt,'همه کانفیگ‌ها کپی شد ✅');
-  };
-  $('#copySub').onclick=async()=>{ await copyText(D.sub_url,'لینک ساب کپی شد ✅'); };
-  $$('#ispTabs .tab').forEach(b=>b.onclick=()=>{
-    ACTIVE_PRESET=D.presets.find(p=>p.id===b.dataset.p)||ACTIVE_PRESET;
-    render();
-  });
-  $$('#protoTabs .tab').forEach(b=>b.onclick=()=>{ PROTO_FILTER=b.dataset.pt; render(); });
-  $$('#guideTabs .tab').forEach(b=>b.onclick=()=>{
-    $$('#guideTabs .tab').forEach(x=>x.classList.toggle('on',x===b));
-    renderGuide(b.dataset.g);
-  });
-  renderGuide('v2rayng');
+    <div class="row" style="margin-top:10px;gap:6px"><span class="xs muted">فرمت‌های دیگر:</span><button class="btn s" onclick="copy(D.formats.b64)">Base64</button><button class="btn s" onclick="copy(D.formats.clash)">Clash YAML</button><button class="btn s" onclick="copy(D.formats.sb)">sing-box JSON</button></div>
+  </div>
+  <div class="card">
+    <h3>📶 بهینه‌سازی اپراتور</h3>
+    <select id="isp" onchange="changePreset(this.value)">${D.presets.map(p => `<option value="${p.id}" ${preset === p.id ? 'selected' : ''}>${esc(p.label)} — ${esc(p.note)}</option>`).join('')}</select>
+    <p class="xs muted" style="margin-top:6px">با انتخاب اپراتور، کانفیگ‌های زیر با fragment و fingerprint مخصوص همان شبکه ساخته می‌شوند. برای اضافه‌کردن ساب با همین تنظیم: <button class="btn s" onclick="copy(subWithPreset(),'لینک ساب اختصاصی اپراتور کپی شد')">📋 لینک ساب این اپراتور</button></p>
+  </div>
+  <div class="card" style="text-align:center">
+    <h3 style="justify-content:center">📷 اسکن با گوشی</h3>
+    <div class="qr" id="qrMain"></div>
+    <div class="xs muted" style="margin-top:6px" id="qrLabel">لینک اشتراک</div>
+  </div>
+  <div class="card">
+    <h3>⚙️ کانفیگ‌های تکی <span class="chip">${fa(links.length)}</span></h3>
+    <div id="cfgs">${links.map((l, i) => `<div class="cfg"><div class="t"><span class="chip ${l.proto === 'vless' ? 'info' : 'vio'}">${l.proto.toUpperCase()}</span><b>${esc(l.name)}</b><div class="grow"></div><button class="btn s" onclick="showQr(${i})">QR</button><button class="btn s p" onclick="copy(links[${i}].link)">کپی</button></div><div class="h mono">${esc(l.host)}:${l.port} · ${l.fp}${l.frag ? ' · frag ' + l.frag.len : ''}</div></div>`).join('')}</div>
+    <div class="row" style="margin-top:10px"><button class="btn" style="width:100%" onclick="copy(links.map(l=>l.link).join('\\n'),'همه‌ی کانفیگ‌ها کپی شد')">📋 کپی همه‌ی کانفیگ‌ها</button></div>
+  </div>`}
+  <div class="foot">${D.show_branding ? `<div class="m">🌷 ${esc(D.brand.memorial)} — ${esc(D.brand.eternal)}</div>` : ''}<div>${esc(D.brand.en)} v${esc(D.version)}${D.contact ? ` · <a href="${esc(D.contact)}" style="color:#7dd3fc">پشتیبانی</a>` : ''}</div></div>`;
+  if (view === 'configs') { qr($('#qrMain'), D.sub_url, 190); }
 }
-
-const GUIDES={
-  v2rayng:[
-    'اپ <b>v2rayNG</b> را از گوگل‌پلی یا GitHub نصب کنید.',
-    'روی صفحه اصلی، آیکون <b>＋</b> (بالای صفحه) را بزنید و <b>«دسترسی از حافظه/Import from clipboard»</b> را انتخاب کنید.',
-    'یکی از کانفیگ‌های بالا را <b>کپی</b> کرده و در اپ Paste کنید؛ یا دکمه <b>QR</b> را بزنید و دوربین را به کد بگیرید.',
-    'بهتر: از <b>لینک ساب‌اسکریپشن</b> استفاده کنید — در v2rayNG: ← «Subscription» ← افزودن؛ آدرس ساب را وارد کنید. با هر تغییر پنل، خودکار آپدیت می‌شود.',
-    'بالای اپ را به <b>VPN</b> وصل کنید و اینترنت آزاد را تجربه کنید 🌷',
-  ],
-  hiddify:[
-    'اپ <b>Hiddify Next</b> را نصب کنید (اندروید/iOS/ویندوز).',
-    'در صفحه اصلی، <b>「+」</b> را بزنید و <b>«افزودن از کلیپ‌بورد»</b> را انتخاب کنید.',
-    'لینک ساب‌اسکریپشن یا کانفیگ کپی‌شده را وارد کنید.',
-    'دکمه اتصال بزرگ را بزنید — تمام!',
-  ],
-  ios:[
-    'اپ <b>Streisand</b> یا <b>V2Box</b> یا <b>Shadowrocket</b> را از App Store نصب کنید.',
-    'در <b>Streisand</b>: منو ← <b>Add Config</b> ← <b>Copy from clipboard</b>.',
-    'یا دکمه <b>QR</b> این صفحه را با دوربین اپ اسکن کنید.',
-    'باتصل، همه چیز آماده است.',
-  ],
-};
-function renderGuide(k){
-  $('#guideBody').innerHTML='<ol>'+GUIDES[k].map(s=>'<li>'+s+'</li>').join('')+'</ol>';
-}
-
-async function copyText(txt,msg){
-  try{
-    await navigator.clipboard.writeText(txt);
-    toast(msg,true);
-  }catch(e){
-    const ta=document.createElement('textarea');
-    ta.value=txt;document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');toast(msg,true)}catch(e2){toast('کپی نشد — دستی کپی کنید')}
-    ta.remove();
-  }
-}
-function copyLink(i){
-  const l=D.links[i];
-  copyText(tunedLink(l.link),'کانفیگ '+l.name+' کپی شد ✅');
-}
-function showQr(i){
-  const l=D.links[i];
-  const link=tunedLink(l.link);
-  const host=$('#modalHost');
-  host.innerHTML=`<div class="modal-bg" id="mbg"><div class="modal">
-    <h4>${esc(l.name)} — ${esc(D.brand?.fa||'جاویدنام')}</h4>
-    <div id="qrBox"></div>
-    <div class="hint">${esc(link.slice(0,90))}…</div>
-    <div style="margin-top:14px"><button class="bbtn bbtn-ghost" style="width:100%" onclick="document.getElementById('mbg').remove()">بستن</button></div>
-  </div></div>`;
-  const qr=qrcode(0,'M');
-  qr.addData(link);
-  qr.make();
-  const n=qr.getModuleCount();
-  const cell=Math.max(3,Math.floor(220/n));
-  const cv=document.createElement('canvas');
-  cv.width=cv.height=n*cell;
-  const cx=cv.getContext('2d');
-  cx.fillStyle='#ffffff';cx.fillRect(0,0,cv.width,cv.height);
-  cx.fillStyle='#0a0a10';
-  for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(qr.isDark(y,x))cx.fillRect(x*cell,y*cell,cell,cell);
-  $('#qrBox').appendChild(cv);
-  $('#mbg').onclick=e=>{if(e.target.id==='mbg')e.target.remove()};
-}
-
-/* live refresh every 60s */
-setInterval(async()=>{
-  try{
-    const r=await fetch(location.pathname+'?json=1',{cache:'no-store'});
-    if(!r.ok)return;
-    const j=await r.json();
-    D.state=j.state;D.name=j.name||D.name;
-    render();
-  }catch(e){}
-},60000);
-
+function subWithPreset() { return preset === 'auto' ? D.sub_url : D.sub_url + '?isp=' + preset; }
+function showQr(i) { qr($('#qrMain'), links[i].link, 190); $('#qrLabel').textContent = links[i].proto.toUpperCase() + ' · ' + links[i].name; $('#qrMain').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+async function changePreset(id) { preset = id; try { const j = await fetch(D.sub_url + '/links' + (id === 'auto' ? '' : '?isp=' + id)).then(r => r.json()); links = j.links; render(); toast('کانفیگ‌ها برای ' + (D.presets.find(p => p.id === id) || {}).label + ' ساخته شد'); } catch (e) { toast('خطا در دریافت'); } }
 render();
 </script>
 </body>
