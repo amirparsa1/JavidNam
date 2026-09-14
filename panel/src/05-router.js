@@ -35,6 +35,7 @@ self.addEventListener('fetch',e=>{e.respondWith(
 
 export default {
   async fetch(request, env, ctx) {
+    initEnv(env);
     const url = new URL(request.url);
     const path = url.pathname;
     const method = request.method;

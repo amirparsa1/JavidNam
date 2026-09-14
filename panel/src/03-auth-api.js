@@ -27,7 +27,7 @@ async function verifyAdminPassword(password) {
 }
 
 async function getSessionSecret() {
-  if (typeof SESSION_SECRET !== 'undefined' && SESSION_SECRET) return SESSION_SECRET;
+  if (SESSION_SECRET) return SESSION_SECRET;
   let row = await dbGet('SELECT value FROM settings WHERE key = ?', ['session_secret']);
   if (!row) {
     const s = rndHex(32);
@@ -55,13 +55,13 @@ async function checkSession(request) {
   return safeEqual(await hmacSign(secret, exp), sig);
 }
 
+/* NOTE: returns the cookie VALUE STRING (used as the Set-Cookie header value) */
 function sessionCookieHeader(value, maxAge = SESSION_TTL / 1000) {
-  const secure = true;
-  return `Set-Cookie: ${SESSION_COOKIE}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Strict${secure ? '; Secure' : ''}`;
+  return `${SESSION_COOKIE}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Strict; Secure`;
 }
 
 function clearSessionHeader() {
-  return `Set-Cookie: ${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict; Secure`;
+  return `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict; Secure`;
 }
 
 async function loginBanned(ip) {

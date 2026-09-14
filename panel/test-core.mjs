@@ -8,10 +8,10 @@ code = code.replace("import { connect } from 'cloudflare:sockets';", 'let connec
 code = code.replace('export default {', 'const __worker = {');
 code = code.replace(/addEventListener\('waituntilflush'[^;]*;/, '');
 
-const DB = null;
-const factory = new Function('DB', 'ADMIN_PASS_HASH', 'SESSION_SECRET',
-  code + '\n;return { parseVlessHeader, parseTrojanHeader, sha224hex, parseUdpDatagram, frameUdpDatagram, userState };');
-const T = factory(null, undefined, undefined);
+const factory = new Function(
+  code + '\n;return { initEnv, parseVlessHeader, parseTrojanHeader, sha224hex, parseUdpDatagram, frameUdpDatagram, userState };');
+const T = factory();
+T.initEnv({});
 
 /* ---------- SHA-224 known vectors (FIPS 180-4) ---------- */
 assert.strictEqual(T.sha224hex(new TextEncoder().encode('abc')), '23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7');

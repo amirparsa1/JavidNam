@@ -2,7 +2,7 @@
  * JavidNam Panel — BUILT ARTIFACT (do not edit; edit src/ + build)
  * جاویدنام — به یاد جان‌بافتگان ۱۸ و ۱۹ دی ۱۴۰۴
  * License: GPL-3.0 | QR: qrcode-generator 1.4.4 (MIT, Kazuhiko Arase)
- * Build time: 2026-09-14T14:40:47.082Z
+ * Build time: 2026-09-14T15:03:00.352Z
  * ============================================================ */
 
 
@@ -114,19 +114,71 @@ function notFound() {
 
 /* ------------------------------------------------------------------ */
 /* D1 helpers (all queries throw-safe; D1 binding is named DB)          */
+/* Auto-creates schema on first use so manual deploys just work.        */
+/* Module syntax: bindings arrive via env — captured here once.         */
 /* ------------------------------------------------------------------ */
 
+let DB = null;
+let ADMIN_PASS_HASH = null;
+let SESSION_SECRET = null;
+
+function initEnv(env) {
+  if (env) {
+    if (env.DB) DB = env.DB;
+    if (env.ADMIN_PASS_HASH) ADMIN_PASS_HASH = env.ADMIN_PASS_HASH;
+    if (env.SESSION_SECRET) SESSION_SECRET = env.SESSION_SECRET;
+  }
+}
+
+let _schemaEnsured = false;
+async function ensureSchema() {
+  if (_schemaEnsured) return;
+  await DB.batch([
+    DB.prepare(`CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY, uuid TEXT UNIQUE NOT NULL, trojan_hash TEXT, name TEXT,
+      sub_token TEXT UNIQUE NOT NULL, quota_bytes INTEGER DEFAULT 0, used_bytes INTEGER DEFAULT 0,
+      reset_hours INTEGER DEFAULT 0, last_reset_at INTEGER, days INTEGER DEFAULT 0, expiry_at INTEGER,
+      start_on_first INTEGER DEFAULT 0, first_connect_at INTEGER, ip_limit INTEGER DEFAULT 0,
+      active INTEGER DEFAULT 1, note TEXT, created_at INTEGER)`),
+    DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_uuid ON users(uuid)`),
+    DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_trojan ON users(trojan_hash)`),
+    DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_token ON users(sub_token)`),
+    DB.prepare(`CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)`),
+    DB.prepare(`CREATE TABLE IF NOT EXISTS login_attempts (ip TEXT PRIMARY KEY, fails INTEGER DEFAULT 0, banned_until INTEGER)`),
+  ]);
+  _schemaEnsured = true;
+}
+
 async function dbAll(sql, params = []) {
-  const { results } = await DB.prepare(sql).bind(...params).all();
-  return results || [];
+  try {
+    const { results } = await DB.prepare(sql).bind(...params).all();
+    return results || [];
+  } catch (e) {
+    if (String(e.message || e).includes('no such table')) { await ensureSchema(); }
+    else throw e;
+    const { results } = await DB.prepare(sql).bind(...params).all();
+    return results || [];
+  }
 }
 
 async function dbGet(sql, params = []) {
-  return await DB.prepare(sql).bind(...params).first();
+  try {
+    return await DB.prepare(sql).bind(...params).first();
+  } catch (e) {
+    if (String(e.message || e).includes('no such table')) { await ensureSchema(); }
+    else throw e;
+    return await DB.prepare(sql).bind(...params).first();
+  }
 }
 
 async function dbRun(sql, params = []) {
-  return await DB.prepare(sql).bind(...params).run();
+  try {
+    return await DB.prepare(sql).bind(...params).run();
+  } catch (e) {
+    if (String(e.message || e).includes('no such table')) { await ensureSchema(); }
+    else throw e;
+    return await DB.prepare(sql).bind(...params).run();
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -134,7 +186,10 @@ async function dbRun(sql, params = []) {
 /* ------------------------------------------------------------------ */
 
 const SETTING_DEFAULTS = {
-  proxy_path: '/jvn-' + rndHex(4),
+  /* NOTE: proxy_path is seeded with a random value into D1 on first read
+     (getSettings) — the placeholder below must stay deterministic because
+     Workers forbid randomness at global scope. */
+  proxy_path: '/jvn-setup',
   title: 'جاویدنام | JavidNam',
   welcome: 'سلام! این اشتراک اختصاصی توئه. لذت ببر 🌷',
   contact: '',
@@ -157,6 +212,14 @@ async function getSettings(force = false) {
   if (!force && _settingsCache && now - _settingsCacheAt < SETTINGS_TTL) return _settingsCache;
   let rows = [];
   try { rows = await dbAll('SELECT key, value FROM settings'); } catch (e) { /* fresh DB */ }
+  /* proxy_path MUST be stable across isolates — seed a random one into D1 once */
+  if (!rows.find(r => r.key === 'proxy_path')) {
+    const candidate = '/jvn-' + rndHex(5);
+    try {
+      await dbRun("INSERT INTO settings (key, value) VALUES ('proxy_path', ?) ON CONFLICT(key) DO NOTHING", [candidate]);
+      rows = await dbAll('SELECT key, value FROM settings');
+    } catch (e) { rows = []; }
+  }
   const s = { ...SETTING_DEFAULTS, locations: null };
   for (const r of rows) {
     if (r.key === 'locations') continue;
@@ -679,7 +742,7 @@ async function verifyAdminPassword(password) {
 }
 
 async function getSessionSecret() {
-  if (typeof SESSION_SECRET !== 'undefined' && SESSION_SECRET) return SESSION_SECRET;
+  if (SESSION_SECRET) return SESSION_SECRET;
   let row = await dbGet('SELECT value FROM settings WHERE key = ?', ['session_secret']);
   if (!row) {
     const s = rndHex(32);
@@ -707,13 +770,13 @@ async function checkSession(request) {
   return safeEqual(await hmacSign(secret, exp), sig);
 }
 
+/* NOTE: returns the cookie VALUE STRING (used as the Set-Cookie header value) */
 function sessionCookieHeader(value, maxAge = SESSION_TTL / 1000) {
-  const secure = true;
-  return `Set-Cookie: ${SESSION_COOKIE}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Strict${secure ? '; Secure' : ''}`;
+  return `${SESSION_COOKIE}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}; HttpOnly; SameSite=Strict; Secure`;
 }
 
 function clearSessionHeader() {
-  return `Set-Cookie: ${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict; Secure`;
+  return `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict; Secure`;
 }
 
 async function loginBanned(ip) {
@@ -1159,6 +1222,7 @@ self.addEventListener('fetch',e=>{e.respondWith(
 
 export default {
   async fetch(request, env, ctx) {
+    initEnv(env);
     const url = new URL(request.url);
     const path = url.pathname;
     const method = request.method;

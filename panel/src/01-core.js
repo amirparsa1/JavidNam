@@ -107,7 +107,20 @@ function notFound() {
 /* ------------------------------------------------------------------ */
 /* D1 helpers (all queries throw-safe; D1 binding is named DB)          */
 /* Auto-creates schema on first use so manual deploys just work.        */
+/* Module syntax: bindings arrive via env — captured here once.         */
 /* ------------------------------------------------------------------ */
+
+let DB = null;
+let ADMIN_PASS_HASH = null;
+let SESSION_SECRET = null;
+
+function initEnv(env) {
+  if (env) {
+    if (env.DB) DB = env.DB;
+    if (env.ADMIN_PASS_HASH) ADMIN_PASS_HASH = env.ADMIN_PASS_HASH;
+    if (env.SESSION_SECRET) SESSION_SECRET = env.SESSION_SECRET;
+  }
+}
 
 let _schemaEnsured = false;
 async function ensureSchema() {
@@ -165,7 +178,10 @@ async function dbRun(sql, params = []) {
 /* ------------------------------------------------------------------ */
 
 const SETTING_DEFAULTS = {
-  proxy_path: '/jvn-' + rndHex(4),
+  /* NOTE: proxy_path is seeded with a random value into D1 on first read
+     (getSettings) — the placeholder below must stay deterministic because
+     Workers forbid randomness at global scope. */
+  proxy_path: '/jvn-setup',
   title: 'جاویدنام | JavidNam',
   welcome: 'سلام! این اشتراک اختصاصی توئه. لذت ببر 🌷',
   contact: '',
@@ -188,6 +204,14 @@ async function getSettings(force = false) {
   if (!force && _settingsCache && now - _settingsCacheAt < SETTINGS_TTL) return _settingsCache;
   let rows = [];
   try { rows = await dbAll('SELECT key, value FROM settings'); } catch (e) { /* fresh DB */ }
+  /* proxy_path MUST be stable across isolates — seed a random one into D1 once */
+  if (!rows.find(r => r.key === 'proxy_path')) {
+    const candidate = '/jvn-' + rndHex(5);
+    try {
+      await dbRun("INSERT INTO settings (key, value) VALUES ('proxy_path', ?) ON CONFLICT(key) DO NOTHING", [candidate]);
+      rows = await dbAll('SELECT key, value FROM settings');
+    } catch (e) { rows = []; }
+  }
   const s = { ...SETTING_DEFAULTS, locations: null };
   for (const r of rows) {
     if (r.key === 'locations') continue;
