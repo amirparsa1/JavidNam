@@ -53,7 +53,7 @@ function qrInto(el, text, size = 180) {
     for (const p of P) {
       p.y -= p.v; p.x += Math.sin(t / 2000 + p.d) * .00025; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); }
       const g = x.createRadialGradient(p.x * w, p.y * h, 0, p.x * w, p.y * h, p.r * 6 * devicePixelRatio);
-      g.addColorStop(0, `rgba(251,113,133,${p.o})`); g.addColorStop(1, 'rgba(251,113,133,0)');
+      g.addColorStop(0, `rgba(167,139,250,${p.o})`); g.addColorStop(1, 'rgba(167,139,250,0)');
       x.fillStyle = g; x.beginPath(); x.arc(p.x * w, p.y * h, p.r * 6 * devicePixelRatio, 0, 6.28); x.fill();
     }
     requestAnimationFrame(f);
@@ -105,8 +105,9 @@ const ICONS = {
   backup: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>',
 };
 const PAGES = [['dash', 'داشبورد'], ['users', 'کاربران'], ['net', 'شبکه و لوکیشن‌ها'], ['settings', 'تنظیمات'], ['tools', 'ابزارها'], ['backup', 'پشتیبان و آپدیت']];
+const NAVCOL = { dash: 'rb-purple', users: 'rb-green', net: 'rb-blue', settings: 'rb-amber', tools: 'rb-cyan', backup: 'rb-pink' };
 function renderNav() {
-  $('#nav').innerHTML = PAGES.map(([id, t]) => `<a data-p="${id}" class="${state.page === id ? 'on' : ''}" onclick="go('${id}')">${ICONS[id]}<span>${t}</span></a>`).join('');
+  $('#nav').innerHTML = PAGES.map(([id, t]) => `<button data-p="${id}" data-t="${t}" class="ring-btn ${NAVCOL[id]} ${state.page === id ? 'on' : ''}" onclick="go('${id}')">${ICONS[id]}</button>`).join('');
   $('#mobnav').innerHTML = PAGES.map(([id, t]) => `<a data-p="${id}" class="${state.page === id ? 'on' : ''}" onclick="go('${id}')">${ICONS[id]}<span>${t.split(' ')[0]}</span></a>`).join('');
 }
 function go(p) { state.page = p; location.hash = p; renderNav(); $('#pageTitle').textContent = (PAGES.find(x => x[0] === p) || [])[1] || ''; refreshPage(); }
@@ -129,15 +130,15 @@ async function pageDash() {
   const usedPct = s.traffic.quota > 0 ? Math.min(100, Math.round(s.traffic.used / s.traffic.quota * 100)) : 0;
   const days = s.cf.days || [];
   const mx = Math.max(1, ...days.map(d => d.requests));
-  const st = (k, v, ic, sub = '') => `<div class="card stat"><div class="ic">${ic}</div><div class="v">${v}</div><div class="k">${k}</div>${sub ? `<div class="xs muted">${sub}</div>` : ''}</div>`;
+  const st = (k, v, ic, sub = '', c = 'c-p') => `<div class="card stat ${c}"><div class="ic">${ic}</div><div class="v">${v}</div><div class="k">${k}</div>${sub ? `<div class="xs muted">${sub}</div>` : ''}</div>`;
   $('#main').innerHTML = `
   <div class="grid g6 fadein">
-    ${st('کل کاربران', fa(s.users.total), '👥')}
-    ${st('فعال', fa(s.users.active), '✅')}
-    ${st('آنلاین (۵ دقیقه)', fa(s.users.online), '🟢')}
-    ${st('رو به انقضا (۷ روز)', fa(s.users.expiring_soon), '⏳')}
-    ${st('منقضی‌شده', fa(s.users.expired), '⛔')}
-    ${st('حجم تمام‌شده', fa(s.users.over_quota), '📦')}
+    ${st('کل کاربران', fa(s.users.total), '👥', '', 'c-p')}
+    ${st('فعال', fa(s.users.active), '✅', '', 'c-g')}
+    ${st('آنلاین (۵ دقیقه)', fa(s.users.online), '🟢', '', 'c-c')}
+    ${st('رو به انقضا (۷ روز)', fa(s.users.expiring_soon), '⏳', '', 'c-a')}
+    ${st('منقضی‌شده', fa(s.users.expired), '⛔', '', 'c-r')}
+    ${st('حجم تمام‌شده', fa(s.users.over_quota), '📦', '', 'c-b')}
   </div>
   <div class="grid g3" style="margin-top:12px">
     <div class="card">
@@ -177,7 +178,7 @@ async function pageDash() {
         <button class="btn" onclick="go('backup')">💾 پشتیبان‌گیری</button>
       </div>
       <div class="hr"></div>
-      <div class="small muted">🌷 جاویدنام — نرم‌افزار آزاد (GPL-3.0). بدون تبلیغ، بدون قفل، بدون DRM. <a href="https://github.com/amirparsa1/JavidNam" target="_blank" style="color:#fda4af">GitHub</a></div>
+      <div class="small muted">🌷 جاویدنام — نرم‌افزار آزاد (GPL-3.0). بدون تبلیغ، بدون قفل، بدون DRM. <a href="https://github.com/amirparsa1/JavidNam" target="_blank" style="color:var(--pl)">GitHub</a></div>
     </div>
   </div>`;
 }
@@ -238,11 +239,13 @@ function renderUsersBody() {
       <td class="small"><div>${fa(u.used_requests || 0)}${u.max_requests ? ' / ' + fa(u.max_requests) : ''}</div><div class="xs muted">${u.ip_limit ? fa(u.online_ips) + ' / ' + fa(u.ip_limit) + ' IP' : 'IP نامحدود'}</div></td>
       <td class="small muted" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(userLocs)}">${esc(userLocs)}</td>
       <td><div class="acts">
-        <button class="btn i" title="لینک ساب و QR" onclick="openShare('${u.id}')">🔗</button>
-        <button class="btn i" title="ویرایش" onclick="openUserModal('${u.id}')">✏️</button>
-        <button class="btn i" title="${u.active ? 'غیرفعال کن' : 'فعال کن'}" onclick="toggleActive('${u.id}',${u.active ? 0 : 1})">${u.active ? '⏸' : '▶️'}</button>
-        <button class="btn i" title="ریست حجم" onclick="resetUser('${u.id}','traffic')">♻️</button>
-        <button class="btn i d" title="حذف" onclick="delUser('${u.id}')">🗑</button>
+        <button class="ring-btn rb-purple sm" title="کپی کانفیگ مستقیم (VLESS)" onclick="copyDirect('${u.id}')">🚀</button>
+        <button class="ring-btn rb-blue sm" title="لوکیشن‌ها و ساب" onclick="openShare('${u.id}')">🌍</button>
+        <button class="ring-btn rb-amber sm" title="صفحه وضعیت کاربر" onclick="window.open('${u.status_url}','_blank')">⚡</button>
+        <button class="ring-btn rb-green sm" title="ویرایش" onclick="openUserModal('${u.id}')">✏️</button>
+        <button class="ring-btn rb-cyan sm" title="${u.active ? 'غیرفعال کن' : 'فعال کن'}" onclick="toggleActive('${u.id}',${u.active ? 0 : 1})">${u.active ? '⏸' : '▶️'}</button>
+        <button class="ring-btn rb-pink sm" title="ریست حجم" onclick="resetUser('${u.id}','traffic')">♻️</button>
+        <button class="ring-btn rb-red sm" title="حذف" onclick="delUser('${u.id}')">🗑</button>
       </div></td></tr>`;
   }).join('') || `<tr><td colspan="8" class="muted" style="text-align:center;padding:30px">کاربری نیست. با «➕ کاربر جدید» شروع کن.</td></tr>`;
   renderBulkbar();
@@ -296,8 +299,10 @@ function openUserModal(id) {
     <div class="grid g2">
       <div><label>نام کاربر *</label><input id="f_name" value="${esc(v('name'))}" placeholder="مثلاً: علی"></div>
       <div><label>یادداشت</label><input id="f_note" value="${esc(v('note'))}" placeholder="اختیاری"></div>
-      <div><label>حجم (GB) — ۰ = نامحدود</label><input id="f_quota" type="number" min="0" step="0.5" value="${u ? (u.quota_bytes / GB) : 20}" class="ltr"></div>
-      <div><label>مدت (روز) — ۰ = نامحدود</label><input id="f_days" type="number" min="0" value="${v('days', 30)}" class="ltr"></div>
+      <div><label>حجم (GB) — ۰ = نامحدود</label><input id="f_quota" type="number" min="0" step="0.5" value="${u ? (u.quota_bytes / GB) : 20}" class="ltr">
+        <div class="quick">${[10, 20, 50, 100, 200].map(g => `<button type="button" onclick="$('#f_quota').value=${g}">${fa(g)} گیگ</button>`).join('')}<button type="button" onclick="$('#f_quota').value=0">♾ نامحدود</button></div></div>
+      <div><label>مدت (روز) — ۰ = نامحدود</label><input id="f_days" type="number" min="0" value="${v('days', 30)}" class="ltr">
+        <div class="quick">${[[7, '۱ هفته'], [30, '۱ ماه'], [60, '۲ ماه'], [90, '۳ ماه'], [180, '۶ ماه'], [365, '۱ سال']].map(([d, l]) => `<button type="button" onclick="$('#f_days').value=${d}">${l}</button>`).join('')}<button type="button" onclick="$('#f_days').value=0">♾ نامحدود</button></div></div>
     </div>
     <div class="grid g2" style="margin-top:10px">
       <div class="sw"><div><b>شروع از اولین اتصال</b><small>شمارش زمان بعد از اولین وصل‌شدن</small></div><label class="switch"><input type="checkbox" id="f_sof" ${v('start_on_first') ? 'checked' : ''}><i></i></label></div>
@@ -381,6 +386,15 @@ function openBulkCreate() {
 }
 
 /* ---- share modal (sub link, QR, formats, per-config) ---- */
+async function copyDirect(id) {
+  const u = state.users.find(x => x.id === id); if (!u) return;
+  try {
+    const j = await fetch(u.sub_url + '/links').then(r => r.json());
+    const l = (j.links || []).find(x => x.proto === 'vless') || (j.links || [])[0];
+    if (!l) return toast('لوکیشنی فعال نیست', 'warn');
+    copy(l.link, '🚀 کانفیگ مستقیم ' + l.name + ' کپی شد');
+  } catch (e) { toast(e.message, 'err'); }
+}
 async function openShare(id, uObj) {
   const u = uObj || state.users.find(x => x.id === id);
   const j = await fetch(u.sub_url + '/links').then(r => r.json()).catch(() => ({ links: [] }));

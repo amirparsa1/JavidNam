@@ -46,16 +46,18 @@ function sha224hex(bytes) {
 }
 
 /* ---- minimal RFC6455 WebSocket client ---- */
-function wsConnect(path) {
+function wsConnect(path, opts = {}) {
   return new Promise((resolve, reject) => {
     const key = crypto.randomBytes(16).toString('base64');
+    const headers = {
+      Host: HOST, Connection: 'Upgrade', Upgrade: 'websocket',
+      'Sec-WebSocket-Version': '13', 'Sec-WebSocket-Key': key,
+      'User-Agent': 'javidnam-e2e/1.0',
+    };
+    if (opts.earlyData) headers['Sec-WebSocket-Protocol'] = Buffer.from(opts.earlyData).toString('base64url');
     const req = https.request({
-      host: HOST, path, port: 443, method: 'GET',
-      headers: {
-        Connection: 'Upgrade', Upgrade: 'websocket',
-        'Sec-WebSocket-Version': '13', 'Sec-WebSocket-Key': key,
-        'User-Agent': 'javidnam-e2e/1.0',
-      },
+      host: opts.ip || HOST, servername: HOST, path, port: 443, method: 'GET', ALPNProtocols: ['http/1.1'],
+      headers,
     });
     req.on('upgrade', (res, socket) => resolve(socket));
     req.on('error', reject);
@@ -108,8 +110,8 @@ function collect(socket, ms = 12000) {
 }
 
 const uuidBytes = Buffer.from(UUID.replace(/-/g, ''), 'hex');
-const targetHost = 'neverssl.com';
-const httpReq = Buffer.from(`GET / HTTP/1.1\r\nHost: neverssl.com\r\nUser-Agent: javidnam-e2e\r\nConnection: close\r\n\r\n`);
+const targetHost = process.env.TARGET_HOST || 'www.gstatic.com';
+const httpReq = Buffer.from(`GET /generate_204 HTTP/1.1\r\nHost: ${targetHost}\r\nUser-Agent: javidnam-e2e\r\nConnection: close\r\n\r\n`);
 
 /* ---- TEST 1: VLESS ---- */
 {
@@ -126,8 +128,26 @@ const httpReq = Buffer.from(`GET / HTTP/1.1\r\nHost: neverssl.com\r\nUser-Agent:
   const txt = resp.toString('latin1');
   assert.strictEqual(resp[0], 0x00, 'vless reply version byte');
   assert.strictEqual(resp[1], 0x00, 'vless reply addon len');
-  assert.ok(/HTTP\/1\.1 200 OK|NeverSSL|text\/html/i.test(txt.slice(2, 600)), 'got example.com response');
+  assert.ok(/HTTP\/1\.[01] \d{3}/.test(txt.slice(2, 600)), 'got example.com response');
   console.log('  ✓ VLESS proxy works! (received', resp.length, 'bytes via Cloudflare → example.com)');
+}
+
+/* ---- TEST 1b: VLESS exactly like xray does with ?ed=2048 (early data in Sec-WebSocket-Protocol) via a clean IP ---- */
+{
+  const ip = process.env.CLEAN_IP || '162.159.129.1';
+  console.log('— VLESS early-data mode (xray ?ed=2048) via clean IP', ip, '→', targetHost + ':80');
+  const vless = Buffer.concat([
+    Buffer.from([0x00]), uuidBytes, Buffer.from([0x00, 0x01]),
+    Buffer.from([0x00, 0x50]),
+    Buffer.from([0x02, targetHost.length]), Buffer.from(targetHost),
+    httpReq,
+  ]);
+  const socket = await wsConnect(PROXY_PATH + '?loc=main', { earlyData: vless, ip });
+  const resp = await collect(socket);
+  const txt = resp.toString('latin1');
+  assert.strictEqual(resp[0], 0x00, 'vless reply version byte (early-data)');
+  assert.ok(/HTTP\/1\.[01] \d{3}/.test(txt.slice(2, 600)), 'got response via early-data');
+  console.log('  ✓ early-data VLESS works via clean IP! (received', resp.length, 'bytes)');
 }
 
 /* ---- TEST 2: Trojan ---- */
@@ -146,7 +166,7 @@ const httpReq = Buffer.from(`GET / HTTP/1.1\r\nHost: neverssl.com\r\nUser-Agent:
   wsSend(socket, trojan);
   const resp = await collect(socket);
   const txt = resp.toString('latin1');
-  assert.ok(/HTTP\/1\.1 200 OK|NeverSSL/i.test(txt.slice(0, 600)), 'got example.com response');
+  assert.ok(/HTTP\/1\.[01] \d{3}/.test(txt.slice(0, 600)), 'got example.com response');
   console.log('  ✓ Trojan proxy works! (received', resp.length, 'bytes)');
 }
 

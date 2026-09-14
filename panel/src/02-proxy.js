@@ -260,13 +260,16 @@ async function establish(plan, host, port, firstPayload) {
       const writer = sock.writable.getWriter();
       if (firstPayload && firstPayload.length) await writer.write(firstPayload);
       const reader = sock.readable.getReader();
-      /* probe: first read within grace window — EOF w/o data means blocked path (e.g. CF-range) */
+      /* probe: first read within grace window — EOF w/o data means blocked path (e.g. CF-range).
+         IMPORTANT: the read() promise must NOT be abandoned on timeout — its eventual value would be lost.
+         We keep it and hand it to the pump as `pending`. */
+      const pendingRead = reader.read();
       let probe;
-      try { probe = await withTimeout(reader.read(), firstPayload && firstPayload.length ? 2500 : 300, 'grace'); }
+      try { probe = await withTimeout(pendingRead, firstPayload && firstPayload.length ? 1500 : 250, 'grace'); }
       catch (e) { probe = { grace: true }; }
       if (probe && probe.done && !probe.grace) throw new Error('closed-early');
       markOut(spec, true);
-      return { sock, writer, reader, first: probe && probe.value ? probe.value : null, via: spec };
+      return { sock, writer, reader, first: probe && probe.value ? probe.value : null, pending: probe && probe.grace ? pendingRead : null, via: spec };
     } catch (e) {
       lastErr = e;
       markOut(spec, false);
@@ -382,9 +385,11 @@ async function handleProxy(request, ctx) {
         /* pump target -> client */
         (async () => {
           const reader = conn.reader;
+          let pending = conn.pending;
           try {
             while (true) {
-              const { done, value } = await reader.read();
+              const { done, value } = await (pending || reader.read());
+              pending = null;
               if (done || !value || closed) break;
               addUsage(user.uuid, value.length);
               server.send(value);
@@ -411,6 +416,16 @@ async function handleProxy(request, ctx) {
       }
       if (conn) { addUsage(user.uuid, u8.length); await conn.writer.write(u8); }
     };
+
+    /* Early data (xray/v2ray `?ed=` mode): first payload arrives base64url in Sec-WebSocket-Protocol */
+    const ed = request.headers.get('Sec-WebSocket-Protocol');
+    if (ed) {
+      try {
+        const b = atob(ed.replace(/-/g, '+').replace(/_/g, '/'));
+        const u8 = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u8[i] = b.charCodeAt(i);
+        if (u8.length) chain = chain.then(() => process(u8)).catch(() => closeAll());
+      } catch (e) {}
+    }
 
     server.addEventListener('message', (ev) => {
       const u8 = ev.data instanceof ArrayBuffer ? new Uint8Array(ev.data) : typeof ev.data === 'string' ? TE.encode(ev.data) : new Uint8Array(ev.data.buffer || ev.data);

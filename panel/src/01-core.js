@@ -20,7 +20,7 @@
 
 import { connect } from 'cloudflare:sockets';
 
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 const BRAND = {
   fa: 'جاویدنام',
   en: 'JavidNam',
@@ -168,7 +168,7 @@ const AI_DOMAINS_DEFAULT = [
 ];
 
 /* default clean anycast ranges (Cloudflare public ranges; scanner in panel finds better ones) */
-const CLEAN_IPS_DEFAULT = ['104.16.0.0', '104.17.0.0', '104.18.0.0', '104.19.0.0', '162.159.128.0', '172.67.0.0', '188.114.96.0', '188.114.97.0'];
+const CLEAN_IPS_DEFAULT = ['www.speedtest.net', 'zula.ir', 'www.visa.com.sg', 'cf.090227.xyz', '104.16.1.1', '104.17.1.1', '172.67.1.1', '162.159.129.1'];
 
 const SETTING_DEFAULTS = {
   proxy_path: '/jvn-setup',            // seeded random on first read
@@ -178,7 +178,7 @@ const SETTING_DEFAULTS = {
   sub_branding: true,
   /* network */
   fp: 'chrome',
-  alpn: 'h2,http/1.1',
+  alpn: 'http/1.1',                   // ws needs http/1.1 (no RFC8441 in clients)
   frag_enabled: true,
   frag_len: '10-20',
   frag_int: '10-20',
@@ -186,8 +186,8 @@ const SETTING_DEFAULTS = {
   sni_mask: '',                        // custom SNI (TLS masking); empty = location host
   host_mask: '',                       // custom WS Host header; empty = panel host
   /* outbound */
-  proxy_ip: '',                        // global fallback proxyIP host[:port] for CF-fronted targets
-  proxy_ips: [],                       // VIP proxy pool (proxyip:.. or socks5://..) — round-robin + failover
+  proxy_ip: 'proxyip.cmliussss.net',    // global fallback proxyIP for CF-fronted targets (Workers can't dial CF IPs directly)
+  proxy_ips: ['proxyip:bpb.yousef.isegaro.com', 'proxyip:cdn.xn--b6gac.eu.org', 'proxyip:cdn-all.xn--b6gac.eu.org', 'proxyip:nima.nscl.ir'], // VIP proxy pool (proxyip:.. or socks5://..) — round-robin + failover
   auto_proxy: false,                   // pull pool from BRAND.repo proxies list when empty
   ai_route: '',                        // '' | 'pool' | outbound spec — route AI domains via this
   ai_domains: AI_DOMAINS_DEFAULT,

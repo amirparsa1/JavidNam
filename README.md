@@ -190,3 +190,16 @@ PANEL_HOST="پنل-تو.workers.dev" PROXY_PATH="/jvn-..." TEST_UUID="uuid-کا�
 A fully original, ad-free VLESS/Trojan subscription panel for Cloudflare Workers, with a Telegram deployer bot that provisions panels on users' own Cloudflare accounts. Built in memory of those killed on 18–19 Dey 1404 (January 8–9, 2026). See the Persian README above for features and setup, or [docs/DEPLOY.md](docs/DEPLOY.md).
 
 **License:** GPL-3.0 · **Zero external dependencies** · **No ads, no tracking**
+
+## نسخه ۲.۱ — طراحی جدید بنفش + رفع باگ پینگ
+
+- 🎨 **طراحی کاملاً جدید**: مینیمال، مدرن، پالت بنفش (مثل ZEUS/پاسارگاد) — نوار بالای دکمه‌های گرد نئونی، کارت‌های آماری رنگی، جدول کاربران با دکمه‌های 🚀 (کپی کانفیگ مستقیم) 🌍 (لوکیشن‌ها و ساب) ⚡ (صفحه‌ی وضعیت).
+- 🧠 یادمان «۱۸ و ۱۹ دی ۱۴۰۴» فقط به‌صورت یک خط آرام در فوتر — بدون فضای غمگین.
+- 🐛 **رفع باگ «کانفیگ پینگ نمی‌دهد»**:
+  - پشتیبانی از **Early-Data** (`?ed=2048` در هدر `Sec-WebSocket-Protocol`) که xray/v2rayNG/Hiddify استفاده می‌کنند و قبلاً نادیده گرفته می‌شد.
+  - رفع گم‌شدن اولین پاسخ سرور در بعضی مقصدها (probe read رها می‌شد).
+  - ProxyIP پیش‌فرض برای مقصدهای پشت کلودفلر (ورکر نمی‌تواند مستقیم به IPهای کلودفلر وصل شود) + استخر ProxyIP با failover.
+  - IPهای تمیز پیش‌فرض واقعی (`www.speedtest.net`, `104.16.1.1`, …) به‌جای آدرس‌های شبکه‌ی `.0`.
+  - ALPN پیش‌فرض `http/1.1` (وب‌سوکت روی h2 در کلاینت‌ها کار نمی‌کند).
+- ✅ تست E2E با **Xray واقعی** (v26) روی همه‌ی لوکیشن‌ها: Google 204، ipify، Cloudflare trace، Discord — همه OK.
+

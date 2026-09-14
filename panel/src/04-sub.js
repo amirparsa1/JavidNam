@@ -32,9 +32,9 @@ function buildConfigLinks(user, settings, locations, panelHost, opts = {}) {
   const links = [];
   for (const loc of locations) {
     const sni = settings.sni_mask || loc.sni || (loc.isClean ? panelHost : loc.host);
-    const path = `${settings.proxy_path}?ed=2560&loc=${encodeURIComponent(loc.id)}`;
+    const path = `${settings.proxy_path}?ed=2048&loc=${encodeURIComponent(loc.id)}`;
     const common = { type: 'ws', host: hostHeader, path, security: loc.tls ? 'tls' : 'none' };
-    if (loc.tls) { common.sni = sni; common.fp = fp; common.alpn = settings.alpn || 'h2,http/1.1'; }
+    if (loc.tls) { common.sni = sni; common.fp = fp; common.alpn = settings.alpn || 'http/1.1'; }
     if (frag) { common.fragment = `${frag.packets},${frag.len},${frag.int}`; }
     const vp = new URLSearchParams({ encryption: 'none', ...common });
     links.push({ id: loc.id, name: loc.name, proto: 'vless', host: loc.host, port: loc.port, tls: loc.tls, sni, fp, frag, link: `vless://${user.uuid}@${bracket(loc.host)}:${loc.port}?${vp}#${encodeURIComponent(`${BRAND.en} | ${loc.name}`)}` });
@@ -55,9 +55,9 @@ function singboxConfig(user, links, settings) {
     const ob = {
       type: l.proto, tag, server: l.host, server_port: l.port,
       ...(l.proto === 'vless' ? { uuid: user.uuid, flow: '' } : { password: user.uuid }),
-      transport: { type: 'ws', path: settings.proxy_path + '?loc=' + l.id, headers: { Host: settings.host_mask || l.sni }, max_early_data: 2560, early_data_header_name: 'Sec-WebSocket-Protocol' },
+      transport: { type: 'ws', path: settings.proxy_path + '?loc=' + l.id, headers: { Host: settings.host_mask || l.sni }, max_early_data: 2048, early_data_header_name: 'Sec-WebSocket-Protocol' },
     };
-    if (l.tls) ob.tls = { enabled: true, server_name: l.sni, insecure: false, utls: { enabled: true, fingerprint: l.fp === 'random' ? 'randomized' : l.fp }, alpn: (settings.alpn || 'h2,http/1.1').split(',') };
+    if (l.tls) ob.tls = { enabled: true, server_name: l.sni, insecure: false, utls: { enabled: true, fingerprint: l.fp === 'random' ? 'randomized' : l.fp }, alpn: (settings.alpn || 'http/1.1').split(',') };
     if (l.frag) ob.tls = { ...(ob.tls || { enabled: true, server_name: l.sni }), fragment: true, fragment_fallback_delay: '500ms' };
     outbounds.push(ob);
   }
@@ -87,9 +87,9 @@ function clashConfig(user, links, settings) {
       `  - name: ${y(name)}`, `    type: ${l.proto}`, `    server: ${y(l.host)}`, `    port: ${l.port}`,
       l.proto === 'vless' ? `    uuid: ${user.uuid}` : `    password: ${user.uuid}`,
       `    udp: true`, `    tls: ${l.tls}`, `    network: ws`, `    servername: ${y(l.sni)}`, `    client-fingerprint: ${l.fp === 'random' ? 'random' : l.fp}`,
-      `    ws-opts:`, `      path: ${y(settings.proxy_path + '?ed=2560&loc=' + l.id)}`, `      headers:`, `        Host: ${y(settings.host_mask || l.sni)}`,
+      `    ws-opts:`, `      path: ${y(settings.proxy_path + '?ed=2048&loc=' + l.id)}`, `      headers:`, `        Host: ${y(settings.host_mask || l.sni)}`,
     ];
-    if (l.tls) base.push(`    alpn: [${(settings.alpn || 'h2,http/1.1').split(',').map(a => y(a.trim())).join(', ')}]`);
+    if (l.tls) base.push(`    alpn: [${(settings.alpn || 'http/1.1').split(',').map(a => y(a.trim())).join(', ')}]`);
     return base.join('\n');
   });
   return [

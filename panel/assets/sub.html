@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07070b">
+<meta name="theme-color" content="#06060d">
 <meta name="robots" content="noindex,nofollow">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>__TITLE__</title>
 <style>
-:root{--bg:#07070b;--bg2:#0d0d14;--card:#11111a;--line:#1f1f2d;--line2:#2b2b3d;--txt:#ecebf3;--mut:#8f8fa3;--rose:#f43f5e;--rose2:#be123c;--amber:#fbbf24;--green:#22c55e;--blue:#38bdf8;--vio:#a78bfa}
+:root{--bg:#06060d;--bg2:#0b0b16;--card:#0e0e1a;--line:#1a1a2e;--line2:#262640;--txt:#eef0ff;--mut:#8b8ca8;--rose:#8b5cf6;--rose2:#6d28d9;--amber:#fbbf24;--green:#22c55e;--blue:#38bdf8;--vio:#a78bfa}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--txt);font-family:"Vazirmatn","Segoe UI",Tahoma,system-ui,sans-serif;font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(700px 400px at 90% -10%,rgba(244,63,94,.16),transparent 60%),radial-gradient(600px 400px at 0% 100%,rgba(251,191,36,.07),transparent 60%)}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(700px 420px at 50% -10%,rgba(124,58,237,.22),transparent 60%),radial-gradient(600px 400px at 0% 100%,rgba(34,211,238,.06),transparent 60%)}
 .wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:18px 14px 60px}
 .hero{text-align:center;padding:18px 0 12px}
-.flame{width:66px;height:66px;border-radius:20px;margin:0 auto 10px;background:linear-gradient(135deg,var(--rose),#7f1d1d);display:grid;place-items:center;box-shadow:0 18px 50px -14px var(--rose)}
+.flame{width:70px;height:70px;border-radius:22px;margin:0 auto 10px;background:linear-gradient(135deg,#8b5cf6,#4c1d95);display:grid;place-items:center;box-shadow:0 18px 50px -14px var(--rose)}
 .hero h1{font-size:22px;font-weight:800}
 .hero p{color:var(--mut);font-size:12.5px}
 .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px;box-shadow:0 12px 40px -14px #000}
@@ -24,21 +24,21 @@ html,body{background:var(--bg);color:var(--txt);font-family:"Vazirmatn","Segoe U
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .row.nw{flex-wrap:nowrap}.row.nw input{min-width:0;flex:1}
 .grow{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:12px;border:1px solid var(--line2);background:#161624;color:var(--txt);font:inherit;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;transition:.15s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:12px;border:1px solid var(--line2);background:#101020;color:var(--txt);font:inherit;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;transition:.15s;white-space:nowrap}
 .btn:hover{border-color:var(--rose)}
-.btn.p{background:linear-gradient(135deg,var(--rose),var(--rose2));border-color:transparent;color:#fff}
+.btn.p{background:linear-gradient(135deg,var(--rose),var(--rose2));border-color:transparent;color:#fff;box-shadow:0 8px 24px -8px rgba(124,58,237,.7)}
 .btn.b{background:linear-gradient(135deg,#0284c7,#0369a1);border-color:transparent;color:#fff}
 .btn.s{padding:7px 10px;font-size:12px;border-radius:10px}
 .btn.i{width:38px;height:38px;padding:0;font-size:16px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid var(--line2);background:var(--bg2);color:var(--mut)}
 .chip.ok{color:#86efac;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.08)}
-.chip.bad{color:#fda4af;border-color:rgba(244,63,94,.4);background:rgba(244,63,94,.08)}
+.chip.bad{color:#fca5a5;border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08)}
 .chip.warn{color:#fde68a;border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08)}
 .chip.info{color:#7dd3fc;border-color:rgba(56,189,248,.4);background:rgba(56,189,248,.08)}
 .chip.vio{color:#c4b5fd;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.08)}
 .bar{height:10px;border-radius:99px;background:#1a1a26;overflow:hidden}
-.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--rose),var(--amber));transition:width 1s}
-.bar.w>i{background:linear-gradient(90deg,var(--amber),var(--rose))}
+.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#22d3ee);transition:width 1s}
+.bar.w>i{background:linear-gradient(90deg,var(--amber),#ef4444)}
 .kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .kv div{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
 .kv b{display:block;font-size:16px}
@@ -61,12 +61,12 @@ select{appearance:none;padding-left:30px;background-image:linear-gradient(45deg,
 .cfg .t b{font-size:13.5px}
 .cfg .h{font-size:11px;color:var(--mut);margin-top:2px}
 .apps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.apps a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:14px;border:1px solid var(--line2);background:#161624;color:var(--txt);text-decoration:none;font-size:12px;font-weight:700}
+.apps a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:14px;border:1px solid var(--line2);background:#101020;color:var(--txt);text-decoration:none;font-size:12px;font-weight:700}
 .apps a span{font-size:22px}
 .apps a small{font-weight:400;color:var(--mut);font-size:10.5px}
 .muted{color:var(--mut)}.small{font-size:12px}.xs{font-size:11px}
 .foot{text-align:center;color:var(--mut);font-size:11.5px;margin-top:22px;line-height:2}
-.foot .m{color:#fda4af}
+.foot .m{color:#c4b5fd}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#15151f;border:1px solid var(--line2);border-right:3px solid var(--green);padding:10px 16px;border-radius:12px;z-index:9;font-size:13px;animation:pop .2s}
 @keyframes pop{from{opacity:0;transform:translate(-50%,8px)}}
 .steps{font-size:12.5px;color:var(--mut);line-height:2}
@@ -92,7 +92,7 @@ function toast(m) { const t = document.createElement('div'); t.className = 'toas
 function copy(t, m = 'کپی شد ✓') { (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast(m)).catch(() => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); toast(m); }); }
 function qr(el, text, size = 200) { try { const q = qrcode(0, 'M'); q.addData(text); q.make(); el.innerHTML = q.createSvgTag({ cellSize: Math.max(2, Math.floor(size / q.getModuleCount())), margin: 0 }); } catch (e) { el.textContent = '—'; } }
 
-(function bg() { const c = $('#bg'), x = c.getContext('2d'); let w, h, P = []; const rs = () => { w = c.width = innerWidth * devicePixelRatio; h = c.height = innerHeight * devicePixelRatio; }; rs(); addEventListener('resize', rs); for (let i = 0; i < 45; i++) P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 2 + .6, v: Math.random() * .0006 + .0002, o: Math.random() * .5 + .2, d: Math.random() * 6.28 }); (function f(t) { x.clearRect(0, 0, w, h); for (const p of P) { p.y -= p.v; p.x += Math.sin(t / 2000 + p.d) * .00025; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); } const g = x.createRadialGradient(p.x * w, p.y * h, 0, p.x * w, p.y * h, p.r * 6 * devicePixelRatio); g.addColorStop(0, `rgba(251,113,133,${p.o})`); g.addColorStop(1, 'rgba(251,113,133,0)'); x.fillStyle = g; x.beginPath(); x.arc(p.x * w, p.y * h, p.r * 6 * devicePixelRatio, 0, 6.28); x.fill(); } requestAnimationFrame(f); })(0); })();
+(function bg() { const c = $('#bg'), x = c.getContext('2d'); let w, h, P = []; const rs = () => { w = c.width = innerWidth * devicePixelRatio; h = c.height = innerHeight * devicePixelRatio; }; rs(); addEventListener('resize', rs); for (let i = 0; i < 45; i++) P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 2 + .6, v: Math.random() * .0006 + .0002, o: Math.random() * .5 + .2, d: Math.random() * 6.28 }); (function f(t) { x.clearRect(0, 0, w, h); for (const p of P) { p.y -= p.v; p.x += Math.sin(t / 2000 + p.d) * .00025; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); } const g = x.createRadialGradient(p.x * w, p.y * h, 0, p.x * w, p.y * h, p.r * 6 * devicePixelRatio); g.addColorStop(0, `rgba(167,139,250,${p.o})`); g.addColorStop(1, 'rgba(167,139,250,0)'); x.fillStyle = g; x.beginPath(); x.arc(p.x * w, p.y * h, p.r * 6 * devicePixelRatio, 0, 6.28); x.fill(); } requestAnimationFrame(f); })(0); })();
 
 const st = D.state, S = D.status;
 let view = D.view, links = D.links, preset = D.preset;
@@ -102,14 +102,14 @@ function render() {
   const R = 50, C = 2 * Math.PI * R, dash = C * (1 - pct / 100);
   $('#root').innerHTML = `
   <div class="hero">
-    <div class="flame"><svg width="36" height="36" viewBox="0 0 64 64"><path d="M32 10c-1.8 5-6 7.2-6 12.6 0 3.4 1.9 6.3 4.2 8.4C29.6 39 27.4 44.6 22 50c7-1.6 11.2-5 13.4-9.6 2.2 4.6 6.4 8 13.4 9.6-5.4-5.4-7.6-11-8.2-19 2.3-2.1 4.2-5 4.2-8.4C44.8 17.2 40.6 15 38.8 10c-1.6 3.4-4.2 5-6.8 5s-5.2-1.6-6.8-5z" fill="#fff"/></svg></div>
+    <div class="flame"><svg width="38" height="38" viewBox="0 0 24 24"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z" fill="#fff"/></svg></div>
     <h1>${esc(D.name)}</h1><p>${esc(D.welcome || D.brand.fa)}</p>
     <div style="margin-top:8px">${statusChip()}</div>
   </div>
   <div class="tabs"><button class="${view === 'configs' ? 'on' : ''}" onclick="view='configs';render()">⚡ اتصال</button><button class="${view === 'status' ? 'on' : ''}" onclick="view='status';render()">📊 وضعیت</button><button class="${view === 'help' ? 'on' : ''}" onclick="view='help';render()">📖 راهنما</button></div>
   ${view === 'status' ? `
   <div class="card" style="text-align:center">
-    <div class="ring"><svg width="118" height="118"><circle cx="59" cy="59" r="${R}" stroke="#1a1a26" stroke-width="10" fill="none"/><circle cx="59" cy="59" r="${R}" stroke="${pct > 85 ? '#f43f5e' : '#fbbf24'}" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${dash}" style="transition:stroke-dashoffset 1s"/></svg><div class="c"><div><b>${st.quota ? fa(pct) + '٪' : '∞'}</b><br><small>مصرف شده</small></div></div></div>
+    <div class="ring"><svg width="118" height="118"><circle cx="59" cy="59" r="${R}" stroke="#1a1a26" stroke-width="10" fill="none"/><circle cx="59" cy="59" r="${R}" stroke="${pct > 85 ? '#ef4444' : '#a78bfa'}" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${dash}" style="transition:stroke-dashoffset 1s"/></svg><div class="c"><div><b>${st.quota ? fa(pct) + '٪' : '∞'}</b><br><small>مصرف شده</small></div></div></div>
     <div class="kv">
       <div><b>${fmtB(st.used)}</b><small>مصرف</small></div>
       <div><b>${st.quota ? fmtB(st.remainingBytes) : '∞'}</b><small>باقی‌مانده</small></div>

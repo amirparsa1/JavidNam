@@ -3,15 +3,14 @@
 /* ------------------------------------------------------------------ */
 
 const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f43f5e"/><stop offset="1" stop-color="#881337"/></linearGradient>
-<radialGradient id="c" cx="0.5" cy="0.35" r="0.5"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f43f5e" stop-opacity="0"/></radialGradient></defs>
-<rect width="64" height="64" rx="14" fill="#07070b"/>
-<path d="M32 10c-1.8 5-6 7.2-6 12.6 0 3.4 1.9 6.3 4.2 8.4C29.6 39 27.4 44.6 22 50c7-1.6 11.2-5 13.4-9.6 2.2 4.6 6.4 8 13.4 9.6-5.4-5.4-7.6-11-8.2-19 2.3-2.1 4.2-5 4.2-8.4C44.8 17.2 40.6 15 38.8 10c-1.6 3.4-4.2 5-6.8 5s-5.2-1.6-6.8-5z" fill="url(#g)"/>
-<ellipse cx="32" cy="24" rx="3.6" ry="6.5" fill="url(#c)" opacity="0.9"/></svg>`;
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#6d28d9"/></linearGradient></defs>
+<rect width="64" height="64" rx="16" fill="#06060d"/><rect x="6" y="6" width="52" height="52" rx="14" fill="url(#g)"/>
+<path d="M35 12L20 33h11l-2 19 15-21h-11z" fill="#fff"/>
+<circle cx="50" cy="14" r="3.5" fill="#fff" opacity=".85"/></svg>`;
 
 const MANIFEST_JSON = JSON.stringify({
   name: 'JavidNam | جاویدنام', short_name: 'JavidNam', description: 'پنل جاویدنام — به یاد ۱۸ و ۱۹ دی ۱۴۰۴',
-  start_url: '/', scope: '/', display: 'standalone', orientation: 'portrait', background_color: '#07070b', theme_color: '#07070b', dir: 'rtl', lang: 'fa',
+  start_url: '/', scope: '/', display: 'standalone', orientation: 'portrait', background_color: '#06060d', theme_color: '#7c3aed', dir: 'rtl', lang: 'fa',
   icons: [{ src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }, { src: '/icon-512.svg', sizes: '512x512', type: 'image/svg+xml', purpose: 'maskable' }],
 });
 
