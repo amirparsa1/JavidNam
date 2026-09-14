@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07070c">
+<title>جاویدنام | پنل مدیریت</title>
+<<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjQzZjVlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjODgxMzM3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwYTBhMTAiLz48cGF0aCBkPSJNMzIgMTBjLTEuOCA1LTYgNy4yLTYgMTIuNiAwIDMuNCAxLjkgNi4zIDQuMiA4LjRDMjkuNiAzOSAyNy40IDQ0LjYgMjIgNTBjNy0xLjYgMTEuMi01IDEzLjQtOS42IDIuMiA0LjYgNi40IDggMTMuNCA5LjYtNS40LTUuNC03LjYtMTEtOC4yLTE5IDIuMy0yLjEgNC4yLTUgNC4yLTguNEM0NC44IDE3LjIgNDAuNiAxNSAzOC44IDEwYy0xLjYgMy40LTQuMiA1LTYuOCA1cy01LjItMS42LTYuOC01eiIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==" type="image/svg+xml">
+<style>
+:root{
+  --bg:#07070c; --bg2:#0c0c14; --card:#11111c; --card2:#161622;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --txt:#f2f2f7; --mut:#8e8ea3; --mut2:#5d5d72;
+  --red:#f43f5e; --red2:#e11d48; --dark:#881337;
+  --amber:#fbbf24; --green:#34d399; --blue:#60a5fa;
+  --r:16px; --sh:0 8px 32px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scrollbar-color:#2a2a3a transparent}
+body{
+  background:var(--bg); color:var(--txt);
+  font-family:Vazirmatn,-apple-system,"Segoe UI",Tahoma,"Iranian Sans",sans-serif;
+  font-size:15px; line-height:1.7; min-height:100vh;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(244,63,94,.08),transparent);
+}
+::selection{background:rgba(244,63,94,.35)}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#26263a;border-radius:9px}
+::-webkit-scrollbar-track{background:transparent}
+a{color:var(--red);text-decoration:none}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit}
+.hidden{display:none!important}
+
+/* ---------- login ---------- */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:36px 30px;box-shadow:var(--sh);text-align:center;position:relative;overflow:hidden}
+.login-card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--red),var(--amber),var(--red),transparent)}
+.brand-mark{width:74px;height:74px;margin:0 auto 14px;display:block}
+.login-card h1{font-size:22px;font-weight:800;margin-bottom:4px}
+.login-card .mem{font-size:12px;color:var(--mut);margin-bottom:24px}
+.field{position:relative;margin-bottom:14px;text-align:right}
+.field input{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;
+  padding:13px 16px;color:var(--txt);font-size:15px;outline:none;transition:.2s}
+.field input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(244,63,94,.15)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+  border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;transition:.2s}
+.btn-main{width:100%;background:linear-gradient(135deg,var(--red2),var(--dark));color:#fff}
+.btn-main:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.login-err{color:var(--red);font-size:13px;min-height:22px;margin-bottom:8px}
+.setup-note{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);color:var(--amber);
+  border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px;text-align:right}
+
+/* ---------- app layout ---------- */
+#app{display:none;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+aside{width:230px;background:var(--bg2);border-left:1px solid var(--line);
+  padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;flex-shrink:0}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.side-brand img{width:40px;height:40px}
+.side-brand b{font-size:17px}
+.side-brand small{display:block;font-size:10.5px;color:var(--mut);font-weight:400}
+nav{display:flex;flex-direction:column;gap:4px;flex:1}
+nav button{display:flex;align-items:center;gap:10px;background:none;border:none;color:var(--mut);
+  padding:11px 14px;border-radius:12px;cursor:pointer;font-size:14.5px;font-weight:600;transition:.15s;text-align:right;width:100%}
+nav button:hover{background:rgba(255,255,255,.04);color:var(--txt)}
+nav button.active{background:linear-gradient(135deg,rgba(225,29,72,.18),rgba(136,19,55,.12));color:#ff8095;
+  box-shadow:inset 0 0 0 1px rgba(244,63,94,.25)}
+.side-foot{border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--mut2);text-align:center;line-height:1.9}
+main{flex:1;padding:26px;max-width:1060px;margin:0 auto;width:100%}
+.pagehead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.pagehead h2{font-size:20px;font-weight:800}
+.pagehead .sub{font-size:12.5px;color:var(--mut);margin-top:2px}
+
+/* ---------- cards & stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:linear-gradient(90deg,transparent,rgba(244,63,94,.5),transparent)}
+.stat .k{font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.stat .v{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:13px;color:var(--mut);font-weight:400}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+
+/* ---------- toolbar & table ---------- */
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.toolbar input[type=search]{flex:1;min-width:180px;background:var(--bg2);border:1px solid var(--line2);
+  border-radius:12px;padding:11px 16px;color:var(--txt);outline:none}
+.toolbar input[type=search]:focus{border-color:var(--red)}
+.btn-ghost{background:var(--card2);border:1px solid var(--line2);color:var(--txt)}
+.btn-ghost:hover{border-color:var(--red);color:#ff8095}
+.btn-danger{background:rgba(225,29,72,.12);border:1px solid rgba(244,63,94,.35);color:#ff8095}
+.btn-danger:hover{background:rgba(225,29,72,.22)}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th{font-size:12px;color:var(--mut);font-weight:600;text-align:right;padding:13px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);font-size:13.5px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:.12s}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.chip-ok{background:rgba(52,211,153,.12);color:var(--green)}
+.chip-off{background:rgba(255,255,255,.07);color:var(--mut)}
+.chip-exp{background:rgba(251,191,36,.12);color:var(--amber)}
+.chip-dead{background:rgba(244,63,94,.13);color:var(--red)}
+.ubar{width:110px;height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.ubar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red2),var(--amber))}
+.rowact{display:flex;gap:6px;flex-wrap:wrap}
+.iconb{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;
+  background:var(--card2);border:1px solid var(--line2);color:var(--mut);cursor:pointer;transition:.15s;font-size:14px}
+.iconb:hover{color:#ff8095;border-color:var(--red)}
+.bulkbar{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+
+/* ---------- forms & modal ---------- */
+.modal-bg{position:fixed;inset:0;background:rgba(3,3,8,.75);backdrop-filter:blur(6px);z-index:50;
+  display:flex;align-items:center;justify-content:center;padding:18px}
+.modal{width:100%;max-width:520px;max-height:92vh;overflow-y:auto;background:var(--card);
+  border:1px solid var(--line2);border-radius:18px;padding:26px;box-shadow:var(--sh)}
+.modal h3{font-size:17px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.modal .x{background:none;border:none;color:var(--mut);font-size:20px;cursor:pointer}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrid .full{grid-column:1/-1}
+label.fl{display:block;font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.fgrid input,.fgrid textarea,.fgrid select{width:100%;background:var(--bg2);border:1px solid var(--line2);
+  border-radius:11px;padding:11px 13px;color:var(--txt);outline:none;font-size:14px}
+.fgrid input:focus,.fgrid textarea:focus{border-color:var(--red)}
+.fgrid textarea{resize:vertical;min-height:64px}
+.check{display:flex;align-items:center;gap:9px;background:var(--bg2);border:1px solid var(--line2);
+  border-radius:11px;padding:11px 13px;cursor:pointer;font-size:13.5px}
+.check input{accent-color:var(--red);width:16px;height:16px}
+.mfoot{display:flex;gap:10px;margin-top:20px}
+.mfoot .btn{flex:1}
+.hint{font-size:11.5px;color:var(--mut2);margin-top:5px}
+.err-inline{color:var(--red);font-size:13px;min-height:18px;margin-top:8px}
+
+/* settings */
+.set-grid{display:grid;gap:16px}
+.loc-row{display:grid;grid-template-columns:1.1fr 1.6fr 90px 60px 40px;gap:10px;margin-bottom:10px;align-items:center}
+.loc-row input{background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;color:var(--txt);outline:none;width:100%;font-size:13.5px}
+.loc-row .iconb{width:38px;height:38px}
+
+/* toast */
+#toasts{position:fixed;bottom:20px;right:20px;z-index:99;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card2);border:1px solid var(--line2);border-right:3px solid var(--red);
+  border-radius:12px;padding:11px 18px;font-size:13.5px;box-shadow:var(--sh);animation:tin .25s}
+.toast.ok{border-right-color:var(--green)}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* empty */
+.empty{padding:50px 20px;text-align:center;color:var(--mut)}
+.empty .big{font-size:38px;margin-bottom:10px;opacity:.7}
+
+@media(max-width:860px){
+  .layout{flex-direction:column}
+  aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;padding:10px 12px;border-left:none;border-bottom:1px solid var(--line);gap:8px;overflow-x:auto}
+  .side-brand{border:none;padding:0 8px 0 0;margin:0;flex-shrink:0}
+  .side-brand div small{display:none}
+  nav{flex-direction:row;gap:2px}
+  nav button{padding:9px 13px;white-space:nowrap;font-size:13px}
+  .side-foot{display:none}
+  main{padding:18px 14px}
+  .fgrid{grid-template-columns:1fr}
+  .loc-row{grid-template-columns:1fr 1fr;grid-auto-rows:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= LOGIN ======================= -->
+<div id="login">
+  <div class="login-card">
+    <img class="brand-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjQzZjVlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjODgxMzM3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwYTBhMTAiLz48cGF0aCBkPSJNMzIgMTBjLTEuOCA1LTYgNy4yLTYgMTIuNiAwIDMuNCAxLjkgNi4zIDQuMiA4LjRDMjkuNiAzOSAyNy40IDQ0LjYgMjIgNTBjNy0xLjYgMTEuMi01IDEzLjQtOS42IDIuMiA0LjYgNi40IDggMTMuNCA5LjYtNS40LTUuNC03LjYtMTEtOC4yLTE5IDIuMy0yLjEgNC4yLTUgNC4yLTguNEM0NC44IDE3LjIgNDAuNiAxNSAzOC44IDEwYy0xLjYgMy40LTQuMiA1LTYuOCA1cy01LjItMS42LTYuOC01eiIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==" alt="JavidNam">
+    <h1>جاویدنام</h1>
+    <div class="mem">JavidNam — پنل مدیریت اشتراک</div>
+    <div id="setupBox" class="setup-note hidden">
+      نصب اولیه: هنوز رمز مدیریتی تعیین نشده. یک رمز قوی (حداقل ۸ کاراکتر) انتخاب کن؛ همین رمز برای ورود استفاده می‌شود.
+    </div>
+    <div class="field"><input id="passInput" type="password" placeholder="رمز مدیریت" autocomplete="current-password"></div>
+    <div class="field hidden" id="pass2Field"><input id="pass2Input" type="password" placeholder="تکرار رمز"></div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="btn btn-main" id="loginBtn">ورود 🌷</button>
+  </div>
+</div>
+
+<!-- ======================= APP ======================= -->
+<div id="app"><div class="layout">
+  <aside>
+    <div class="side-brand">
+      <img src="/favicon.svg" alt="">
+      <div><b>جاویدنام</b><small>JavidNam Panel</small></div>
+    </div>
+    <nav id="nav">
+      <button data-view="dash" class="active">📊 داشبورد</button>
+      <button data-view="users">👥 کاربران</button>
+      <button data-view="settings">⚙️ تنظیمات</button>
+      <button data-view="backup">🗄 پشتیبان‌گیری</button>
+    </nav>
+    <div class="side-foot">
+      به یاد جان‌باختگان ۱۸ و ۱۹ دی ۱۴۰۴<br>نامشان جاوید 🕯<br><span id="verChip"></span>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div></div>
+
+<div id="toasts"></div>
+
+<script>
+/* ===== JavidNam Admin — original code, GPL-3.0 ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+let VIEW = 'dash';
+let USERS = [];
+
+/* ---------- Jalali date (standard public algorithm) ---------- */
+function div(a,b){return ~~(a/b)}
+function toJalali(gy,gm,gd){
+  const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
+  const gy2=gy-1600,gm2=gm-1,gd2=gd-1;
+  let g_day_no=365*gy2+div(gy2+3,4)-div(gy2+99,100)+div(gy2+399,400);
+  g_day_no+=g_d_m[gm2]+gd2;
+  if(gm2>1&&((gy%4===0&&gy%100!==0)||(gy%400===0)))g_day_no++;
+  g_day_no-=79;
+  let j_day_no=div(g_day_no,12053);g_day_no%=12053;
+  let jy=979+33*j_day_no+4*div(g_day_no,1461);
+  g_day_no%=1461;
+  if(g_day_no>=366){jy+=div(g_day_no-1,365);g_day_no=(g_day_no-1)%365}
+  const ml=[31,31,31,31,31,31,30,30,30,30,30,29];
+  let i;
+  for(i=0;i<11&&g_day_no>=ml[i];i++)g_day_no-=ml[i];
+  return [jy,i+1,g_day_no+1];
+}
+function fa(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+function jalali(ts){
+  if(!ts)return '—';
+  const d=new Date(ts);
+  const [jy,jm,jd]=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
+  return fa(jd)+' '+['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][jm-1]+' '+fa(jy);
+}
+function gb(bytes){
+  if(!bytes) return '۰';
+  const u=['بایت','کیلوبایت','مگابایت','گیگابایت','ترابایت'];
+  let i=0,v=bytes;
+  while(v>=1024&&i<4){v/=1024;i++}
+  return fa(v.toFixed(v<10&&i>1?2:0))+' '+u[i];
+}
+function daysLeft(ts){
+  if(!ts)return null;
+  return Math.max(0,Math.ceil((ts-Date.now())/86400000));
+}
+
+/* ---------- api ---------- */
+async function api(path, opts={}){
+  const o={headers:{'X-JN':'1'},...opts};
+  if(o.body&&typeof o.body==='object'){o.headers['Content-Type']='application/json';o.body=JSON.stringify(o.body)}
+  const r=await fetch(path,o);
+  const j=await r.json().catch(()=>({error:'bad-response'}));
+  if(r.status===401&&path!=='/api/login'){showLogin();throw new Error('unauthorized')}
+  if(!r.ok)throw new Error(j.error||'خطا');
+  return j;
+}
+
+/* ---------- toasts ---------- */
+function toast(msg,ok=false){
+  const t=document.createElement('div');
+  t.className='toast'+(ok?' ok':'');
+  t.textContent=msg;
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),320)},2600);
+}
+
+/* ---------- login ---------- */
+let SETUP_MODE=false;
+function showLogin(){
+  $('#app').style.display='none';
+  $('#login').style.display='flex';
+  document.cookie='jn_session=; Path=/; Max-Age=0';
+}
+async function tryLogin(){
+  const p=$('#passInput').value;
+  const err=$('#loginErr');
+  err.textContent='';
+  if(SETUP_MODE){
+    if(p.length<8){err.textContent='رمز باید حداقل ۸ کاراکتر باشد';return}
+    if(p!==$('#pass2Input').value){err.textContent='تکرار رمز یکسان نیست';return}
+    try{
+      await api('/api/setup',{method:'POST',body:{password:p}});
+      toast('رمز تنظیم شد؛ وارد شوید',true);
+      SETUP_MODE=false;$('#setupBox').classList.add('hidden');$('#pass2Field').classList.add('hidden');
+      $('#passInput').value='';return;
+    }catch(e){err.textContent=e.message;return}
+  }
+  $('#loginBtn').disabled=true;
+  try{
+    const r=await api('/api/login',{method:'POST',body:{password:p}});
+    if(r.ok){enterApp()}
+  }catch(e){
+    err.textContent=e.message||'رمز اشتباه است';
+  }finally{$('#loginBtn').disabled=false}
+}
+$('#loginBtn').onclick=tryLogin;
+$('#passInput').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin()});
+
+async function enterApp(){
+  $('#login').style.display='none';
+  $('#app').style.display='block';
+  $$('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+  go('dash');
+}
+
+/* ---------- router ---------- */
+function go(view){
+  VIEW=view;
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+  if(view==='dash')renderDash();
+  if(view==='users')renderUsers();
+  if(view==='settings')renderSettings();
+  if(view==='backup')renderBackup();
+}
+
+/* ---------- dashboard ---------- */
+async function renderDash(){
+  $('#main').innerHTML='<div class="empty">⏳ در حال بارگذاری…</div>';
+  try{
+    const s=await api('/api/stats');
+    $('#verChip').textContent='v'+s.version;
+    $('#main').innerHTML=`
+    <div class="pagehead"><div><h2>داشبورد</h2><div class="sub">نمای کلی پنل جاویدنام</div></div>
+      <button class="btn btn-main btn-sm" onclick="openUserModal()">＋ کاربر جدید</button></div>
+    <div class="stats">
+      <div class="stat"><div class="k">کاربران</div><div class="v">${fa(s.users.total)}</div></div>
+      <div class="stat"><div class="k">فعال</div><div class="v" style="color:var(--green)">${fa(s.users.active)}</div></div>
+      <div class="stat"><div class="k">مصرف کل</div><div class="v">${gb(s.traffic.used)}</div></div>
+      <div class="stat"><div class="k">انقضا نزدیک (۷ روز)</div><div class="v" style="color:var(--amber)">${fa(s.expiring_soon)}</div></div>
+    </div>
+    <div class="card">
+      <b style="font-size:14px">🕯 جاویدنام</b>
+      <p style="font-size:13px;color:var(--mut);margin-top:8px">
+        این پنل به یاد جان‌بافتگان ۱۸ و ۱۹ دی ۱۴۰۴ ساخته شده است؛ نامشان جاوید.<br>
+        پروتکل‌ها: VLESS و Trojan روی WebSocket — مبتنی بر Cloudflare Workers، بدون هیچ تبلیغی.
+      </p>
+    </div>`;
+  }catch(e){$('#main').innerHTML='<div class="empty">⚠️ '+e.message+'</div>'}
+}
+
+/* ---------- users ---------- */
+async function renderUsers(){
+  $('#main').innerHTML='<div class="empty">⏳ در حال بارگذاری…</div>';
+  try{
+    const r=await api('/api/users'+(location.search?'':''));
+    USERS=r.users;
+    paintUsers();
+  }catch(e){$('#main').innerHTML='<div class="empty">⚠️ '+e.message+'</div>'}
+}
+function stateChip(u){
+  if(!u.active)return '<span class="chip chip-off">غیرفعال</span>';
+  if(u.state.overQuota)return '<span class="chip chip-dead">حجم تمام</span>';
+  if(u.state.expired)return '<span class="chip chip-dead">منقضی</span>';
+  if(u.state.pending)return '<span class="chip chip-exp">شروع با اتصال</span>';
+  return '<span class="chip chip-ok">فعال</span>';
+}
+function paintUsers(){
+  const q=($('#userSearch')?.value||'').trim().toLowerCase();
+  const rows=USERS.filter(u=>!q||u.name.toLowerCase().includes(q)||u.uuid.includes(q));
+  const html=`
+  <div class="pagehead"><div><h2>کاربران</h2><div class="sub">مدیریت اشتراک‌ها</div></div></div>
+  <div class="toolbar">
+    <input type="search" id="userSearch" placeholder="جستجو (نام یا UUID)…" value="${q.replace(/"/g,'&quot;')}">
+    <button class="btn btn-main btn-sm" onclick="openUserModal()">＋ کاربر جدید</button>
+    <button class="btn btn-ghost btn-sm" onclick="renderUsers()">↻</button>
+  </div>
+  <div class="tblwrap"><table>
+    <thead><tr><th style="width:34px"><input type="checkbox" id="selAll" style="accent-color:var(--red)"></th>
+      <th>نام</th><th>وضعیت</th><th>مصرف / سهمیه</th><th>انقضا</th><th>لینک ساب</th><th></th></tr></thead>
+    <tbody>
+    ${rows.map(u=>`
+      <tr data-id="${u.id}">
+        <td><input type="checkbox" class="sel" value="${u.id}" style="accent-color:var(--red)"></td>
+        <td><b>${esc(u.name)}</b>${u.note?'<br><small style="color:var(--mut2)">'+esc(u.note)+'</small>':''}</td>
+        <td>${stateChip(u)}</td>
+        <td><div style="display:flex;align-items:center;gap:8px">
+          <div class="ubar"><i style="width:${u.quota_bytes?Math.min(100,u.used_bytes/u.quota_bytes*100):0}%"></i></div>
+          <span style="font-size:12px;color:var(--mut);white-space:nowrap">${gb(u.used_bytes)}${u.quota_bytes?' / '+gb(u.quota_bytes):''}</span></div></td>
+        <td style="font-size:12.5px">${u.expiry_at?jalali(u.expiry_at)+'<br><small style="color:'+(daysLeft(u.expiry_at)<=3?'var(--red)':'var(--mut)')+'">'+(daysLeft(u.expiry_at)!==null?fa(daysLeft(u.expiry_at))+' روز':'')+'</small>':(u.state.pending?'<small style="color:var(--amber)">شروع با اتصال</small>':'نامحدود')}</td>
+        <td><button class="iconb" title="کپی لینک ساب" onclick="copySub('${u.sub_token}')">🔗</button>
+            <button class="iconb" title="باز کردن پنل کاربر" onclick="window.open('/sub/${u.sub_token}','_blank')">👁</button></td>
+        <td><div class="rowact">
+          <button class="iconb" title="ویرایش" onclick="openUserModal('${u.id}')">✏️</button>
+          <button class="iconb" title="ریست مصرف" onclick="resetUser('${u.id}')">♻️</button>
+          <button class="iconb" title="${u.active?'غیرفعال کن':'فعال کن'}" onclick="toggleUser('${u.id}',${u.active?0:1})">${u.active?'⏸':'▶️'}</button>
+          <button class="iconb" title="حذف" onclick="delUser('${u.id}','${esc(u.name).replace(/'/g,'')}')">🗑</button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody></table></div>
+  <div class="bulkbar" id="bulkbar">
+    <span>عملیات گروهی:</span>
+    <button class="btn btn-ghost btn-sm" onclick="bulk('activate')">فعال‌سازی</button>
+    <button class="btn btn-ghost btn-sm" onclick="bulk('deactivate')">غیرفعال‌سازی</button>
+    <button class="btn btn-ghost btn-sm" onclick="bulk('reset_traffic')">ریست مصرف</button>
+    <button class="btn btn-danger btn-sm" onclick="bulk('delete')">حذف</button>
+  </div>
+  ${!rows.length?'<div class="empty"><div class="big">👥</div>هنوز کاربری اضافه نشده؛ «کاربر جدید» را بزن</div>':''}`;
+  $('#main').innerHTML=html;
+  $('#userSearch').oninput=()=>paintUsers();
+  $('#userSearch').onkeydown=e=>{if(e.key==='Enter')paintUsers()};
+  $('#selAll').onchange=e=>$$('.sel').forEach(c=>c.checked=e.target.checked);
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+async function copySub(tok){
+  try{await navigator.clipboard.writeText(location.origin+'/sub/'+tok);toast('لینک ساب کپی شد ✅',true)}
+  catch(e){prompt('این لینک را کپی کن:',location.origin+'/sub/'+tok)}
+}
+async function resetUser(id){
+  if(!confirm('مصرف و انقضای این کاربر ریست شود؟'))return;
+  try{await api('/api/users/'+id+'/reset',{method:'POST',body:{traffic:true,expiry:true}});toast('ریست شد ✅',true);renderUsers()}
+  catch(e){toast(e.message)}
+}
+async function toggleUser(id,val){
+  try{await api('/api/users/'+id,{method:'PATCH',body:{active:!!val}});renderUsers()}
+  catch(e){toast(e.message)}
+}
+async function delUser(id,name){
+  if(!confirm('کاربر «'+name+'» برای همیشه حذف شود؟'))return;
+  try{await api('/api/users/'+id,{method:'DELETE'});toast('حذف شد',true);renderUsers()}
+  catch(e){toast(e.message)}
+}
+async function bulk(action){
+  const ids=$$('.sel:checked').map(c=>c.value);
+  if(!ids.length){toast('اول کاربرها را انتخاب کن');return}
+  if(action==='delete'&&!confirm(ids.length+' کاربر حذف شود؟'))return;
+  try{await api('/api/bulk',{method:'POST',body:{ids,action}});toast('انجام شد ✅',true);renderUsers()}
+  catch(e){toast(e.message)}
+}
+
+/* ---------- user modal ---------- */
+function openUserModal(id){
+  const u=id?USERS.find(x=>x.id===id):null;
+  const modal=document.createElement('div');
+  modal.className='modal-bg';
+  modal.innerHTML=`<div class="modal">
+    <h3>${u?'ویرایش کاربر':'کاربر جدید'} <button class="x">✕</button></h3>
+    <div class="fgrid">
+      <div class="full"><label class="fl">نام *</label><input id="f_name" value="${u?esc(u.name):''}" placeholder="مثلاً: علی"></div>
+      <div><label class="fl">حجم (گیگابایت)</label><input id="f_quota" type="number" min="0" value="${u?(u.quota_bytes/1073741824).toFixed(2):''}" placeholder="0 = نامحدود"></div>
+      <div><label class="fl">مدت (روز)</label><input id="f_days" type="number" min="0" value="${u?u.days:30}" placeholder="0 = نامحدود"></div>
+      <div><label class="fl">محدودیت IP همزمان</label><input id="f_ip" type="number" min="0" max="10" value="${u?u.ip_limit:2}" placeholder="0 = نامحدود"></div>
+      <div><label class="fl">ریست دوره‌ای مصرف (ساعت)</label><input id="f_reset" type="number" min="0" value="${u?u.reset_hours:0}" placeholder="0 = هرگز"></div>
+      <div><label class="fl">UUID (خالی = خودکار)</label><input id="f_uuid" value="${u?u.uuid:''}" placeholder="uuid-v4"></div>
+      <div><label class="fl">تمدید (روز)</label><input id="f_ext" type="number" min="0" placeholder="فقط هنگام ویرایش"></div>
+      <div><label class="check"><input type="checkbox" id="f_sof" ${!u||u.start_on_first?'checked':''}> شروع شمارش با اولین اتصال</label></div>
+      <div class="full"><label class="fl">یادداشت</label><textarea id="f_note">${u?esc(u.note||''):''}</textarea></div>
+    </div>
+    <div class="err-inline" id="mErr"></div>
+    <div class="mfoot">
+      <button class="btn btn-ghost" id="mCancel">انصراف</button>
+      <button class="btn btn-main" id="mSave">💾 ذخیره</button>
+    </div></div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.x').onclick=modal.querySelector('#mCancel').onclick=()=>modal.remove();
+  modal.querySelector('#mSave').onclick=async()=>{
+    const body={
+      name:modal.querySelector('#f_name').value.trim(),
+      quota_gb:parseFloat(modal.querySelector('#f_quota').value)||0,
+      days:parseInt(modal.querySelector('#f_days').value)||0,
+      ip_limit:parseInt(modal.querySelector('#f_ip').value)||0,
+      reset_hours:parseFloat(modal.querySelector('#f_reset').value)||0,
+      start_on_first:modal.querySelector('#f_sof').checked,
+      note:modal.querySelector('#f_note').value.trim(),
+    };
+    if(u){
+      body.active=u.active;
+      const ext=parseInt(modal.querySelector('#f_ext').value)||0;
+      if(ext>0)body.extend_days=ext;
+      try{await api('/api/users/'+u.id,{method:'PATCH',body});modal.remove();toast('ذخیره شد ✅',true);renderUsers()}
+      catch(e){modal.querySelector('#mErr').textContent=e.message}
+    }else{
+      const uuid=modal.querySelector('#f_uuid').value.trim();
+      if(uuid)body.uuid=uuid;
+      try{const r=await api('/api/users',{method:'POST',body});modal.remove();toast('کاربر اضافه شد ✅',true);renderUsers()}
+      catch(e){modal.querySelector('#mErr').textContent=e.message}
+    }
+  };
+}
+
+/* ---------- settings ---------- */
+let SETTINGS=null;
+async function renderSettings(){
+  $('#main').innerHTML='<div class="empty">⏳ در حال بارگذاری…</div>';
+  try{
+    const r=await api('/api/settings');
+    SETTINGS=r.settings;
+    const s=SETTINGS;
+    $('#main').innerHTML=`
+    <div class="pagehead"><div><h2>تنظیمات</h2><div class="sub">پیکربندی پنل و کانفیگ‌ها</div></div></div>
+    <div class="card set-grid">
+      <div><label class="fl">عنوان پنل</label><input id="s_title" value="${esc(s.title)}"></div>
+      <div><label class="fl">متن خوش‌آمد پنل ساب</label><input id="s_welcome" value="${esc(s.welcome||'')}"></div>
+      <div><label class="fl">راه ارتباطی (نمایش در پنل ساب)</label><input id="s_contact" value="${esc(s.contact||'')}" placeholder="مثلاً @yourTelegram"></div>
+      <div><label class="fl">مسیر WebSocket پروکسی</label><input id="s_path" value="${esc(s.proxy_path)}">
+        <div class="hint">پس از تغییر، کانفیگ‌های قبلی کاربران باطل می‌شوند؛ لینک ساب خودش آپدیت می‌شود.</div></div>
+      <label class="check"><input type="checkbox" id="s_brand" ${s.sub_branding!==false?'checked':''}> نمایش برندینگ یادبود در پنل ساب</label>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <b style="font-size:14px">🌍 لوکیشن‌ها (میزبان‌های کانفیگ)</b>
+      <div class="hint" style="margin-bottom:12px">هر لوکیشن یک میزبان برای تولید کانفیگ است. می‌توانی دامنه/آی‌پی «تمیز» کلودفلر (Clean IP) یا دامنه اختصاصی خودت را وارد کنی. پورت‌های TLS: 443، 2053، 2083، 2087، 2096، 8443.</div>
+      <div id="locList"></div>
+      <button class="btn btn-ghost btn-sm" onclick="addLocRow()">＋ افزودن لوکیشن</button>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px">
+      <button class="btn btn-main" id="saveSettings">💾 ذخیره تنظیمات</button>
+    </div>`;
+    const list=$('#locList');
+    s.locations.forEach(l=>locRow(list,l.name,l.host,l.port,l.tls));
+    $('#saveSettings').onclick=saveSettingsClick;
+  }catch(e){$('#main').innerHTML='<div class="empty">⚠️ '+e.message+'</div>'}
+}
+function locRow(list,name,host,port,tls){
+  const row=document.createElement('div');
+  row.className='loc-row';
+  row.innerHTML=`<input class="l_name" value="${esc(name)}" placeholder="نام (مثلاً آلمان)">
+    <input class="l_host" value="${esc(host)}" placeholder="دامنه یا آی‌پی">
+    <input class="l_port" type="number" value="${port}" placeholder="443">
+    <label class="check" style="padding:8px"><input type="checkbox" class="l_tls" ${tls!==false?'checked':''}>TLS</label>
+    <button class="iconb" title="حذف">🗑</button>`;
+  row.querySelector('.iconb').onclick=()=>row.remove();
+  list.appendChild(row);
+}
+function addLocRow(){locRow($('#locList'),'لوکیشن جدید','',443,true)}
+async function saveSettingsClick(){
+  const locs=$$('#locList .loc-row').map(r=>({
+    name:r.querySelector('.l_name').value.trim()||'لوکیشن',
+    host:r.querySelector('.l_host').value.trim(),
+    port:parseInt(r.querySelector('.l_port').value)||443,
+    tls:r.querySelector('.l_tls').checked,
+  })).filter(l=>l.host);
+  const body={
+    title:$('#s_title').value.trim()||'جاویدنام | JavidNam',
+    welcome:$('#s_welcome').value.trim(),
+    contact:$('#s_contact').value.trim(),
+    proxy_path:$('#s_path').value.trim(),
+    sub_branding:$('#s_brand').checked,
+    locations:locs,
+  };
+  try{await api('/api/settings',{method:'PUT',body});toast('تنظیمات ذخیره شد ✅',true)}
+  catch(e){toast(e.message)}
+}
+
+/* ---------- backup ---------- */
+function renderBackup(){
+  $('#main').innerHTML=`
+  <div class="pagehead"><div><h2>پشتیبان‌گیری</h2><div class="sub">خروجی و بازگردانی کامل داده‌ها</div></div></div>
+  <div class="card">
+    <p style="font-size:13.5px;color:var(--mut);margin-bottom:14px">پشتیبان شامل همه کاربران، مصرف‌ها و تنظیمات (بدون رمزها) به‌صورت JSON است.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-main" id="expBtn">⬇️ دانلود پشتیبان</button>
+      <label class="btn btn-ghost" style="cursor:pointer">⬆️ انتخاب فایل<input type="file" id="impFile" accept=".json" style="display:none"></label>
+    </div>
+    <div class="hint" style="margin-top:14px">بازگردانی، کاربران موجود با UUID یکسان را به‌روز می‌کند.</div>
+  </div>`;
+  $('#expBtn').onclick=async()=>{
+    try{
+      const b=await api('/api/backup');
+      const blob=new Blob([JSON.stringify(b,null,2)],{type:'application/json'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download='javidnam-backup-'+new Date().toISOString().slice(0,10)+'.json';
+      a.click();
+      toast('پشتیبان دانلود شد ✅',true);
+    }catch(e){toast(e.message)}
+  };
+  $('#impFile').onchange=async e=>{
+    const f=e.target.files[0];
+    if(!f)return;
+    if(!confirm('فایل پشتیبان بازگردانی شود؟'))return;
+    try{
+      const data=JSON.parse(await f.text());
+      const r=await api('/api/restore',{method:'POST',body:data});
+      toast(r.restored+' کاربر بازگردانی شد ✅',true);
+    }catch(err){toast('خطا: '+err.message)}
+  };
+}
+
+/* ---------- boot ---------- */
+(async()=>{
+  if(location.protocol==="file:"||true){return}
+  try{
+    await api('/api/me');
+    enterApp();
+  }catch(e){
+    if(String(e.message).includes('unauthorized')){
+      try{
+        await api('/api/login',{method:'POST',body:{password:''}});
+      }catch(e2){
+        if(e2.setup){SETUP_MODE=true;$('#setupBox').classList.remove('hidden');$('#pass2Field').classList.remove('hidden');$('#loginBtn').textContent='ثبت رمز و ورود'}
+      }
+    }
+  }
+})();
+</script>
+</body>
+</html>
