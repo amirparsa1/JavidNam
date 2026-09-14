@@ -9,7 +9,7 @@
  */
 
 /* ---------------- config ---------------- */
-const BOT_VERSION = '1.0.0';
+const BOT_VERSION = '1.1.0';
 const DEFAULT_SOURCE = 'https://raw.githubusercontent.com/amirparsa1/JavidNam/main/panel/javidnam-worker.js';
 const CF_API = 'https://api.cloudflare.com/client/v4';
 const MAX_PANELS_PER_USER = 10;
@@ -188,25 +188,63 @@ const WELCOME = `🕯 <b>به جاویدنام خوش آمدی</b>
 از دکمه‌های زیر انتخاب کن: 👇`;
 
 /* ---------------- flow: register account ---------------- */
+/* Cloudflare's official "API token template URL": opens the Create-Token form
+   with permissions, account/zone scope and the token name already filled in.
+   User just clicks "Continue to summary" → "Create Token". */
+const TOKEN_PERMS = [
+  { key: 'workers_scripts', type: 'edit' },
+  { key: 'd1', type: 'edit' },
+  { key: 'account_settings', type: 'read' },
+];
+const TOKEN_TEMPLATE_URL = 'https://dash.cloudflare.com/profile/api-tokens'
+  + '?permissionGroupKeys=' + encodeURIComponent(JSON.stringify(TOKEN_PERMS))
+  + '&accountId=*&zoneId=all&name=' + encodeURIComponent('JavidNam Panel');
+const CF_LOGIN_URL = 'https://dash.cloudflare.com/login';
+const CF_SIGNUP_URL = 'https://dash.cloudflare.com/sign-up/workers-and-pages';
+
 function accountGuide() {
   return [
-    [{ text: '🔑 ساخت توکن Cloudflare', url: 'https://dash.cloudflare.com/profile/api-tokens' }],
-    [{ text: '🔙 منوی اصلی', callback_data: 'a:home' }],
+    [{ text: '🌐 ورود به حساب کلودفلر', url: CF_LOGIN_URL }],
+    [{ text: '🔑 دریافت توکن اختصاصی جاویدنام', url: TOKEN_TEMPLATE_URL }],
+    [{ text: '🆕 حساب کلودفلر ندارم', url: CF_SIGNUP_URL }, { text: '🎬 راهنمای تصویری', callback_data: 'a:tokhelp' }],
+    [{ text: '🔙 انصراف و بازگشت به منو', callback_data: 'a:home' }],
   ];
 }
-const TOKEN_HELP = `👤 <b>ثبت حساب Cloudflare</b>
+const TOKEN_HELP = `☁️ <b>اتصال حساب کلودفلر به جاویدنام</b>
 
-۱) روی دکمه‌ی زیر بزن تا به صفحه‌ی توکن‌های کلودفلر بری.
-۲) <b>Create Token</b> → قالب <b>«Edit Cloudflare Workers»</b> را انتخاب کن، یا یک توکن سفارشی با این دسترسی‌ها بساز:
+⚠️ <b>توجه مهم:</b> برای اینکه خطا نگیری، مراحل زیر را <u>به ترتیب</u> انجام بده. اگر در مرورگر لاگین نیستی، حتماً از گام اول شروع کن.
 
-<blockquote>Account · Workers Scripts : Edit
-Account · D1 : Edit
-Account · Account Settings : Read</blockquote>
+🔹 <b>گام اول:</b>
+روی دکمه‌ی <b>«ورود به حساب کلودفلر»</b> بزن و وارد حسابت شو.
+<i>(بعد از ورود موفق، دوباره به همین‌جا در تلگرام برگرد)</i>
 
-۳) توکن ساخته‌شده را <b>دقیقاً همین‌جا بفرست</b>.
-🔐 پیام توکن بلافاصله بعد از بررسی حذف می‌شود و به‌صورت رمزنگاری‌شده ذخیره می‌گردد.
+🔹 <b>گام دوم:</b>
+حالا روی <b>«دریافت توکن اختصاصی جاویدنام»</b> بزن.
+صفحه‌ای باز می‌شود که <b>همه‌ی دسترسی‌ها از قبل تنظیم شده‌اند</b> ✅ — هیچ چیزی را تغییر نده؛ فقط برو پایین صفحه، دکمه‌ی آبی <code>Continue to summary</code> و بعد <code>Create Token</code> را بزن.
 
-⚠️ اگر همان لحظه ثبت نشد، یک بار دیگر توکن را بفرست.`;
+🔹 <b>گام سوم:</b>
+توکن تولیدشده را کپی کن و <b>دقیقاً در همین چت</b> بفرست.
+
+🔐 <i>پیام توکن بلافاصله بعد از بررسی حذف و توکن به‌صورت رمزنگاری‌شده ذخیره می‌شود.</i>
+
+👇 <i>منتظر توکن تو هستم… (برای لغو، دکمه‌ی بازگشت را بزن)</i>`;
+
+const TOKEN_HELP_DETAILS = `🎬 <b>راهنمای گام‌به‌گام دریافت توکن</b>
+
+۱) دکمه‌ی «ورود به حساب کلودفلر» → ایمیل و رمزت را بزن (اگر حساب نداری، از «حساب کلودفلر ندارم» رایگان بساز؛ فقط ایمیل لازم است).
+
+۲) دکمه‌ی «دریافت توکن اختصاصی جاویدنام» → صفحه‌ی <b>Create Custom Token</b> باز می‌شود و این‌ها از قبل انتخاب شده‌اند:
+<blockquote>🟢 Account · Workers Scripts · Edit
+🟢 Account · D1 · Edit
+🟢 Account · Account Settings · Read
+📛 Token name: JavidNam Panel</blockquote>
+
+۳) اسکرول کن پایین → <code>Continue to summary</code> → <code>Create Token</code>.
+
+۴) توکن (یک رشته‌ی ۴۰ کاراکتری) را با دکمه‌ی <b>Copy</b> کپی کن و همین‌جا بفرست. ✅
+
+❓ <b>اگر صفحه‌ی توکن خالی باز شد یا خطا داد:</b> یعنی در مرورگر لاگین نبودی؛ اول گام ۱ را انجام بده و دوباره دکمه‌ی گام ۲ را بزن.
+❓ <b>اگر بات گفت «دسترسی کافی نیست»:</b> توکن را از همین دکمه بساز، نه به‌صورت دستی.`;
 
 /* ---------------- flow: help ---------------- */
 const HELP_TEXT = `📖 <b>راهنمای جاویدنام</b>
@@ -291,7 +329,7 @@ async function handleMessage(msg) {
   }
 
   const step = await getStep(chatId);
-  if (step && step.step === 'await_token') return processTokenMessage(chatId, text);
+  if (step && step.step === 'await_token') return processTokenMessage(chatId, text, msg.message_id);
   return sendMsg(chatId, 'از منوی زیر استفاده کن 👇', mainMenu());
 }
 
@@ -308,6 +346,10 @@ async function handleCallback(cb) {
   if (data === 'a:accadd') {
     await setStep(chatId, 'await_token');
     return sendMsg(chatId, TOKEN_HELP, accountGuide());
+  }
+  if (data === 'a:tokhelp') {
+    await setStep(chatId, 'await_token');
+    return sendMsg(chatId, TOKEN_HELP_DETAILS, accountGuide());
   }
   if (data.startsWith('a:accdel:')) return deleteAccount(chatId, data.split(':')[2]);
 
@@ -329,7 +371,7 @@ async function showAccounts(chatId) {
   const ids = await userAccountIds(chatId);
   if (!ids.length) {
     return sendMsg(chatId,
-      `👤 حسابی ثبت نشده.\n\nبرای شروع، یک توکن Cloudflare بساز و بفرست 👇`, accountGuide());
+      `⚠️ <b>هیچ اکانت کلودفلری یافت نشد!</b>\n\n` + TOKEN_HELP, accountGuide());
   }
   const kb = [];
   for (const id of ids) {
@@ -342,9 +384,9 @@ async function showAccounts(chatId) {
   return sendMsg(chatId, `👤 <b>حساب‌های ثبت‌شده‌ی تو</b>\n\nبرای حذف روی حساب بزن:`, kb);
 }
 
-async function processTokenMessage(chatId, token) {
+async function processTokenMessage(chatId, token, msgId) {
   /* delete the token message immediately for security */
-  await tg('deleteMessage', { chat_id: chatId, message_id: (await getStep(chatId) || {}).data?.lastMsgId }).catch(() => {});
+  if (msgId) await tg('deleteMessage', { chat_id: chatId, message_id: msgId }).catch(() => {});
   await sendMsg(chatId, '🔍 در حال بررسی توکن…');
   try {
     if (!/^([A-Za-z0-9_-]{20,})$/.test(token)) throw new Error('قالب توکن معتبر نیست');

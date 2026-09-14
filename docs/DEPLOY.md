@@ -4,6 +4,13 @@
 
 ## توکن کلودفلر (برای بات)
 
+> ⚡ **راه سریع / Quick way:** این لینک صفحه‌ی ساخت توکن را با تمام دسترسی‌ها از قبل تنظیم‌شده باز می‌کند — فقط `Continue to summary` → `Create Token`:
+>
+> [🔑 دریافت توکن اختصاصی جاویدنام](https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22d1%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%5D&accountId=*&zoneId=all&name=JavidNam%20Panel)
+>
+> (این همان دکمه‌ای است که بات تلگرام هم می‌دهد. اگر صفحه خالی باز شد، اول در dash.cloudflare.com لاگین کن.)
+
+
 1. به [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) برو
 2. **Create Token** → **Get started** روی «Custom token»
 3. دسترسی‌ها:
