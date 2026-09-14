@@ -9,12 +9,12 @@
  */
 
 /* ---------------- config ---------------- */
-const BOT_VERSION = '1.1.0';
+const BOT_VERSION = '1.2.0';
 const DEFAULT_SOURCE = 'https://raw.githubusercontent.com/amirparsa1/JavidNam/main/panel/javidnam-worker.js';
 const CF_API = 'https://api.cloudflare.com/client/v4';
 const MAX_PANELS_PER_USER = 10;
 const DEPLOY_COOLDOWN_SEC = 60;
-const SESSION_TTL = 900;
+const SESSION_TTL = 6 * 3600;
 
 /* ---------------- tiny utils ---------------- */
 const TE = new TextEncoder();
@@ -328,9 +328,30 @@ async function handleMessage(msg) {
       `👑 <b>آمار بات جاویدنام</b>\n\n📦 پنل‌های فعال: <b>${list.keys.length}</b>\n👤 حساب‌های ثبت‌شده: <b>${accList.keys.length}</b>\n🤖 نسخه: <code>${BOT_VERSION}</code>`, mainMenu());
   }
 
+  /* Cloudflare token auto-detect: works at ANY time, no need to be in a special state.
+     Accepts: 40-char classic tokens, cfut_/cfat_ prefixed tokens, pasted with "Bearer ",
+     quotes, spaces/newlines, or inside a sentence. */
+  const tok = extractCfToken(text);
+  if (tok) return processTokenMessage(chatId, tok, msg.message_id);
+
   const step = await getStep(chatId);
-  if (step && step.step === 'await_token') return processTokenMessage(chatId, text, msg.message_id);
+  if (step && step.step === 'await_token') {
+    if (msg.message_id) await tg('deleteMessage', { chat_id: chatId, message_id: msg.message_id }).catch(() => {});
+    return sendMsg(chatId,
+      `🤔 این شبیه توکن کلودفلر نیست.\n\nتوکن یک رشته‌ی حدوداً ۴۰ کاراکتری از حروف و اعداد است (معمولاً با <code>cfut_</code> شروع می‌شود). آن را از دکمه‌ی سبز بساز، با <b>Copy</b> کپی کن و همین‌جا بفرست 👇`,
+      accountGuide());
+  }
   return sendMsg(chatId, 'از منوی زیر استفاده کن 👇', mainMenu());
+}
+
+function extractCfToken(text) {
+  if (!text) return null;
+  const cleaned = text.replace(/https?:\/\/\S+/g, ' ').replace(/^bearer\s+/i, '').replace(/[`"'«»]/g, ' ');
+  const m = cleaned.match(/(?:cfut_|cfat_)?[A-Za-z0-9_-]{38,64}/g);
+  if (!m) return null;
+  /* pick the longest candidate that looks like a token (has both letters and digits) */
+  const cands = m.filter(t => /[A-Za-z]/.test(t) && /[0-9]/.test(t)).sort((a, b) => b.length - a.length);
+  return cands[0] || null;
 }
 
 /* ---------------- callback router ---------------- */
@@ -370,6 +391,7 @@ async function userAccountIds(chatId) { return (await kvGet('useraccs:' + chatId
 async function showAccounts(chatId) {
   const ids = await userAccountIds(chatId);
   if (!ids.length) {
+    await setStep(chatId, 'await_token');
     return sendMsg(chatId,
       `⚠️ <b>هیچ اکانت کلودفلری یافت نشد!</b>\n\n` + TOKEN_HELP, accountGuide());
   }
@@ -385,27 +407,47 @@ async function showAccounts(chatId) {
 }
 
 async function processTokenMessage(chatId, token, msgId) {
-  /* delete the token message immediately for security */
+  /* delete the raw token message immediately for security */
   if (msgId) await tg('deleteMessage', { chat_id: chatId, message_id: msgId }).catch(() => {});
-  await sendMsg(chatId, '🔍 در حال بررسی توکن…');
+  const prog = await sendMsg(chatId, '🔐 پیام توکن پاک شد.\n🔍 در حال بررسی توکن و دسترسی‌ها…');
+  const pid = prog && prog.result && prog.result.message_id;
+  const out = (text, kb) => pid ? editMsg(chatId, pid, text, kb).catch(() => sendMsg(chatId, text, kb)) : sendMsg(chatId, text, kb);
   try {
-    if (!/^([A-Za-z0-9_-]{20,})$/.test(token)) throw new Error('قالب توکن معتبر نیست');
-    const accounts = await verifyCfToken(token);
-    const acc = accounts[0];
-    const missing = await probePerms(token, acc.id);
-    if (missing.length) throw new Error('به این دسترسی‌ها نیاز است: ' + missing.join('، '));
-    const accId = acc.id;
-    await kvPut('acc:' + accId, { enc: await enc(token), name: acc.name || acc.id, accId });
+    let accounts;
+    try { accounts = await verifyCfToken(token); }
+    catch (e) {
+      const m = String(e.message || '');
+      if (/invalid|authentication|unable to authenticate|6003|10000/i.test(m)) throw new Error('توکن نامعتبر است یا ناقص کپی شده. دوباره از دکمه‌ی سبز بساز و کامل کپی کن.');
+      if (/غیرفعال/.test(m)) throw new Error('این توکن غیرفعال/منقضی شده. یک توکن جدید بساز.');
+      if (/هیچ اکانتی/.test(m)) throw new Error('توکن معتبر است ولی به اکانت دسترسی ندارد (Account Settings:Read کم است). لطفاً توکن را از دکمه‌ی سبز بساز تا دسترسی‌ها خودکار ست شوند.');
+      throw e;
+    }
+    const registered = [];
+    const failed = [];
+    for (const acc of accounts) {
+      const missing = await probePerms(token, acc.id);
+      if (missing.length) { failed.push(`${acc.name || acc.id}: ${missing.join('، ')}`); continue; }
+      await kvPut('acc:' + acc.id, { enc: await enc(token), name: acc.name || acc.id, accId: acc.id, addedAt: Date.now() });
+      registered.push(acc);
+    }
+    if (!registered.length) throw new Error('توکن معتبر است ولی دسترسی کافی ندارد:\n' + failed.join('\n') + '\n\nتوکن را از دکمه‌ی سبز «دریافت توکن اختصاصی» بساز تا همه‌ی دسترسی‌ها خودکار تنظیم شوند.');
     const ids = new Set(await userAccountIds(chatId));
-    ids.add(accId);
+    registered.forEach(a => ids.add(a.id));
     await kvPut('useraccs:' + chatId, [...ids]);
     await clearStep(chatId);
-    /* try to delete the raw token message */
-    return sendMsg(chatId,
-      `✅ <b>حساب ثبت شد!</b>\n\n🏷 ${esc(acc.name || acc.id)}\n\nحالا می‌توانی پنل بسازی 🚀`,
-      [[{ text: '🚀 ساخت پنل جدید', callback_data: 'a:build' }], [{ text: '🔙 منوی اصلی', callback_data: 'a:home' }]]);
+
+    const kb = registered.map(a => [{ text: `🚀 ساخت پنل روی «${a.name || a.id}»`, callback_data: `a:buildacc:${a.id}` }]);
+    kb.push([{ text: '👤 حساب‌ها', callback_data: 'a:accounts' }, { text: '🔙 منوی اصلی', callback_data: 'a:home' }]);
+    return out(
+      `✅ <b>حساب کلودفلر با موفقیت متصل شد!</b>\n\n` +
+      registered.map(a => `☁️ <b>${esc(a.name || a.id)}</b>\n<code>${a.id}</code>`).join('\n\n') +
+      `\n\n🟢 Workers Scripts · Edit\n🟢 D1 · Edit\n🟢 Account Settings · Read` +
+      (failed.length ? `\n\n⚠️ اکانت‌های بدون دسترسی کافی (رد شدند):\n${esc(failed.join('\n'))}` : '') +
+      `\n\n🔐 توکن رمزنگاری‌شده ذخیره شد و پیام اصلی پاک شد.\n\nحالا فقط یک کلیک تا پنل اختصاصی‌ات فاصله داری 👇`,
+      kb);
   } catch (e) {
-    return sendMsg(chatId, '❌ ' + esc(e.message) + '\n\nدوباره توکن را بفرست یا از راهنما کمک بگیر:', accountGuide());
+    await setStep(chatId, 'await_token');
+    return out('❌ <b>ثبت حساب ناموفق بود</b>\n\n' + esc(e.message) + '\n\n👇 توکن جدید را همین‌جا بفرست:', accountGuide());
   }
 }
 
@@ -420,7 +462,8 @@ async function deleteAccount(chatId, accId) {
 async function startBuild(chatId) {
   const ids = await userAccountIds(chatId);
   if (!ids.length) {
-    return sendMsg(chatId, '❗ اول یک حساب Cloudflare ثبت کن:', accountGuide());
+    await setStep(chatId, 'await_token');
+    return sendMsg(chatId, '❗ <b>اول باید یک حساب Cloudflare وصل کنی</b>\n\n' + TOKEN_HELP, accountGuide());
   }
   const kb = [];
   for (const id of ids) {
